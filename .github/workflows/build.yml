@@ -24,6 +24,7 @@ jobs:
       - name: Install SonarCloud scanner
         run: |
           dotnet tool install --global dotnet-sonarscanner --version 5.8.0
+          dotnet tool install --global coverlet.console
       - name: Install dependencies
         run: |
           dotnet restore
@@ -32,6 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          dotnet sonarscanner begin /k:"BME-Crysys-HITMan_ShoppingLikeFlies.DomainServices" /o:"bme-crysys-hitman" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build
+          dotnet sonarscanner begin /k:"BME-Crysys-HITMan_ShoppingLikeFlies.DomainServices" /o:"bme-crysys-hitman" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io"
+          dotnet build --no-incremental
+          coverlet ./test/DomainServices.UnitTest/bin/Debug/net6.0/DomainServices.UnitTest.dll --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
