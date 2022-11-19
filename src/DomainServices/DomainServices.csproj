@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DataAccessLogic\**" />
+    <EmbeddedResource Remove="DataAccessLogic\**" />
+    <None Remove="DataAccessLogic\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<InternalsVisibleTo Include="DomainServices.UnitTest" />
 		<InternalsVisibleTo Include="DomainServices.IntegrationTest" />

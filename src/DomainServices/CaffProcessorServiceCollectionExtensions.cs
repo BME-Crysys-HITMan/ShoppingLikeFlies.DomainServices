@@ -1,14 +1,16 @@
 ﻿using DataAccessLogic.Extensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ShoppingLikeFiles.DomainServices.Core;
 using ShoppingLikeFiles.DomainServices.Core.Internal;
+using ShoppingLikeFiles.DomainServices.Mappings;
 using ShoppingLikeFiles.DomainServices.Options;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class CaffProcessorServiceCollectionExtensions
 {
-    public static IServiceCollection AddCaffProcessor(this IServiceCollection services)
+    public static IServiceCollection AddCaffProcessor(this IServiceCollection services, IConfiguration configuration)
     {
         if (services is null)
         {
@@ -19,12 +21,13 @@ public static class CaffProcessorServiceCollectionExtensions
 
         services.TryAddSingleton<ICaffValidator, DefaultCaffValidator>();
 
-        services.AddDataAccessLayer();
-
+        services.AddDataAccessLayer(configuration);
+        services.AddSingleton(_ => MapperConfig.ConfigureAutoMapper());
+        
         return services;
     }
 
-    public static IServiceCollection AddCaffProcessor(this IServiceCollection services, Action<CaffValidatorOptions> setupAction)
+    public static IServiceCollection AddCaffProcessor(this IServiceCollection services, Action<CaffValidatorOptions> setupAction, IConfiguration configuration)
     {
         if (services == null)
         {
@@ -36,7 +39,7 @@ public static class CaffProcessorServiceCollectionExtensions
             throw new ArgumentNullException(nameof(setupAction));
         }
 
-        services.AddCaffProcessor();
+        services.AddCaffProcessor(configuration);
         services.Configure(setupAction);
 
         return services;
