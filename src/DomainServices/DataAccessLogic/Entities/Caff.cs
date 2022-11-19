@@ -17,5 +17,6 @@ namespace DataAccessLogic.Entities
         public DateTime CreationDateTime { get; set; }
         public string Creator { get; set; }
         public ICollection<CaffToTag> Tags { get; set; }
+        public string ThumbnailPath { get; set; }
     }
 }

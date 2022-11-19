@@ -8,5 +8,6 @@ namespace ShoppingLikeFiles.DomainServices.Core
 {
     internal interface IThumbnailGenerator
     {
+        byte[][] GenerateThumbnail();
     }
 }

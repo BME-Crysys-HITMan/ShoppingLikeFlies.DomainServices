@@ -24,6 +24,10 @@ namespace DataAccessLogic.Configurations
 
             builder.Property(x => x.Creator)
                 .IsUnicode(false);
+
+            builder.Property(x => x.ThumbnailPath)
+                .IsUnicode(false)
+                .IsRequired();
         }
     }
 }
