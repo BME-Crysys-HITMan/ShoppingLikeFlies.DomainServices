@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLogic.Context
 {
-    internal class ShoppingLikeFliesDbContext : DbContext, IShoppingLikeFliesDbContext
+    internal class ShoppingLikeFliesDbContext : DbContext
     {
         public virtual DbSet<Caff> Caff { get; set; }
         public virtual DbSet<CaffTag> CaffTag { get; set; }

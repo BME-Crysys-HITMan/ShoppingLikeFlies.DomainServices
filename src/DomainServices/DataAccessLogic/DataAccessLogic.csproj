@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Entities\Comment.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,9 +22,5 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="DataAccessLogic.UnitTest" />
 		<InternalsVisibleTo Include="DataAccessLogic.IntegrationTest" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="Entities\Comment.cs" />
 	</ItemGroup>
 </Project>
