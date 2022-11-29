@@ -14,6 +14,7 @@ namespace DataAccessLogic.Context
         public virtual DbSet<Caff> Caff { get; set; }
         public virtual DbSet<CaffTag> CaffTag { get; set; }
         public virtual DbSet<CaffToTag> CaffToTag { get; set; }
+        public virtual DbSet<Comment> Comment { get; set; }
         public ShoppingLikeFliesDbContext(DbContextOptions<ShoppingLikeFliesDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +23,7 @@ namespace DataAccessLogic.Context
             modelBuilder.ApplyConfiguration(new CaffConfiguration());
             modelBuilder.ApplyConfiguration(new CaffTagConfiguration());
             modelBuilder.ApplyConfiguration(new CaffToTagConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfigration());
             base.OnModelCreating(modelBuilder);
         }
     }

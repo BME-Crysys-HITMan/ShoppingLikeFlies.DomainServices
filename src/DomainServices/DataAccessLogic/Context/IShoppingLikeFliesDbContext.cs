@@ -13,5 +13,6 @@ namespace DataAccessLogic.Context
         DbSet<Caff> Caff { get; set; }
         DbSet<CaffTag> CaffTag { get; set; }
         DbSet<CaffToTag> CaffToTag { get; set; }
+        DbSet<Comment> CaffToTag { get; set; }
     }
 }

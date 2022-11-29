@@ -17,5 +17,7 @@ namespace ShoppingLikeFiles.DomainServices.DTOs
         public byte Minute { get; set; }
         public string Creator { get; set; }
         public List<CaffTagDTO> Tags { get; set; }
+        public string ThumbnailPath { get; set; }
+        public List<CommentDTO> Comments { get; set; }
     }
 }

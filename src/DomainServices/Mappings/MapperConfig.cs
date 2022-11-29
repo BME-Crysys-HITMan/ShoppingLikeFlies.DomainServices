@@ -16,6 +16,7 @@ namespace ShoppingLikeFiles.DomainServices.Mappings
                 config.ConfigureCaff();
                 config.ConfigureCaffTag();
                 config.ConfigureCaffToTag();
+                config.ConfigureComment();
             });
             config.AssertConfigurationIsValid();
             return config.CreateMapper();

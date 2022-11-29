@@ -26,7 +26,8 @@ namespace ShoppingLikeFiles.DomainServices.Mappings
                .ForMember(dest => dest.Month, m => m.MapFrom(src => src.Caff.CreationDateTime.Month))
                .ForMember(dest => dest.Day, m => m.MapFrom(src => src.Caff.CreationDateTime.Day))
                .ForMember(dest => dest.Hour, m => m.MapFrom(src => src.Caff.CreationDateTime.Hour))
-               .ForMember(dest => dest.Minute, m => m.MapFrom(src => src.Caff.CreationDateTime.Minute));
+               .ForMember(dest => dest.Minute, m => m.MapFrom(src => src.Caff.CreationDateTime.Minute))
+               .ForMember(dest => dest.ThumbnailPath, m => m.MapFrom(src => src.Caff.ThumbnailPath));
 
             return mapperConfigurationExpression;
         }
