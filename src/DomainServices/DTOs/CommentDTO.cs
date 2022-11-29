@@ -12,5 +12,6 @@ namespace ShoppingLikeFiles.DomainServices.DTOs
         public int CaffId { get; set; }
         public CaffDTO Caff { get; set; }
         public int UserId { get; set; }
+        public string Text { get; set; }
     }
 }

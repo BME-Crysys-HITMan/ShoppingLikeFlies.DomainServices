@@ -18,10 +18,9 @@ namespace DataAccessLogic.Configurations
                 .IsUnicode(false)
                 .IsRequired();
 
-            builder.HasKey(x => new { x.CaffId, x.UserId });
 
             builder.HasOne(x => x.Caff)
-                .WithMany(x => x.Tags)
+                .WithMany(x => x.Comments)
                 .HasForeignKey(x => x.CaffId)
                 .HasConstraintName($"fk{nameof(Comment)}To{nameof(Caff)}")
                 .OnDelete(DeleteBehavior.ClientCascade);
