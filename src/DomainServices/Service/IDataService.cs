@@ -11,6 +11,6 @@ public interface IDataService
     Task<Guid> CreateCaff(CreateCaffContract contract);
     Task<bool> DeleteCaff(Guid id);
     Task<List<CaffResponse>> SearchCaff(string? creator = null, string? caption = null, string[]? tags = null);
-    Task<CaffResponse> GetCaff(Guid id);
+    Task<CaffDTO> AsyncGetCaff(int id);
     Task<List<CaffResponse>> GetAll();
 }
