@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLogic.Configurations
 {
-    public class CommentConfigration : IEntityTypeConfiguration<Comment>
+    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {

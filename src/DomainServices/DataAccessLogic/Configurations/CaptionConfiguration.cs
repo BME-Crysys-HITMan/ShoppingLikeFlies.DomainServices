@@ -22,7 +22,7 @@ namespace DataAccessLogic.Configurations
                 .WithMany(x => x.Captions)
                 .HasForeignKey(x => x.CaffId)
                 .HasConstraintName($"fk{nameof(Caption)}To{nameof(Caff)}")
-                .OnDelete(DeleteBehavior.ClientCascade)  
+                .OnDelete(DeleteBehavior.ClientCascade); 
         }
     }
 }
