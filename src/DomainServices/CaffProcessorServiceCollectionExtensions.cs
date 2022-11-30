@@ -17,8 +17,6 @@ public static class CaffProcessorServiceCollectionExtensions
             throw new ArgumentNullException(nameof(services));
         }
 
-
-
         //services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<CaffValidatorOptions>, CaffValidatorOptions>());
 
         services.TryAddSingleton<ICaffValidator, DefaultCaffValidator>();

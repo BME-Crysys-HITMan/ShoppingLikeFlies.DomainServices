@@ -1,5 +1,8 @@
 ﻿namespace ShoppingLikeFiles.DomainServices.Service;
 
+/// <summary>
+/// This class represents a payment transaction.
+/// </summary>
 public interface IPaymentService
 {
     /// <summary>
