@@ -8,8 +8,25 @@
 	  <PackageId>Crysis.HITmen.ShoppingLikeFiles.DomainServices</PackageId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DataAccessLogic\**" />
+    <EmbeddedResource Remove="DataAccessLogic\**" />
+    <None Remove="DataAccessLogic\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<InternalsVisibleTo Include="DomainServices.UnitTest" />
 		<InternalsVisibleTo Include="DomainServices.IntegrationTest" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AutoMapper" Version="12.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+	  <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.11" />
+	  <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="DataAccessLogic\DataAccessLogic.csproj" />
 	</ItemGroup>
 </Project>
