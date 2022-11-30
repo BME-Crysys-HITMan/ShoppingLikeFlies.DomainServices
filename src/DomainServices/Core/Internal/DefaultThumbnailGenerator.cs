@@ -1,8 +1,8 @@
 ﻿namespace ShoppingLikeFiles.DomainServices.Core.Internal;
 
-internal class DefaultThumbnailGenerator: IThumbnailGenerator
+internal class DefaultThumbnailGenerator : IThumbnailGenerator
 {
-    byte[][] GenerateThumbnail()
+    public void GenerateThumbnail()
     {
         throw new NotImplementedException();
     }
