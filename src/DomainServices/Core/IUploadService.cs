@@ -5,6 +5,11 @@
 /// </summary>
 internal interface IUploadService
 {
+    /// <summary>
+    /// Saves a file to a persistent storage solution.
+    /// </summary>
+    /// <returns></returns>
+    Task<string> UploadFileAsync(string filename, byte[] filecontent);
     Task<string> UploadFileAsync(byte[] fileContent);
     string UploadFile(byte[] fileContent);
     Task<bool> RemoveFileAsync(string fileLocation);
