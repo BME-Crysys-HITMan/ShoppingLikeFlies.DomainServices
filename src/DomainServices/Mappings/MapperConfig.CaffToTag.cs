@@ -27,7 +27,15 @@ namespace ShoppingLikeFiles.DomainServices.Mappings
                .ForMember(dest => dest.Day, m => m.MapFrom(src => src.Caff.CreationDateTime.Day))
                .ForMember(dest => dest.Hour, m => m.MapFrom(src => src.Caff.CreationDateTime.Hour))
                .ForMember(dest => dest.Minute, m => m.MapFrom(src => src.Caff.CreationDateTime.Minute))
-               .ForMember(dest => dest.ThumbnailPath, m => m.MapFrom(src => src.Caff.ThumbnailPath));
+               .ForMember(dest => dest.ThumbnailPath, m => m.MapFrom(src => src.Caff.ThumbnailPath))
+               .ForMember(dest => dest.Comments, m => m.MapFrom(src => src.Caff.Comments))
+               .ForMember(dest => dest.Captions, m => m.MapFrom(src => src.Caff.Captions));
+
+            mapperConfigurationExpression.CreateMap<CaffTagDTO, CaffToTag>()
+                .ForMember(dest => dest.CaffTag, m => m.MapFrom(src => src))
+                .ForMember(dest => dest.CaffTagId, m => m.Ignore())
+                .ForMember(dest => dest.CaffId, m => m.Ignore())
+                .ForMember(dest => dest.Caff, m => m.Ignore());
 
             return mapperConfigurationExpression;
         }

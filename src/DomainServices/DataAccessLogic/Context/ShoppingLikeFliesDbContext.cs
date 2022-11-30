@@ -24,6 +24,7 @@ namespace DataAccessLogic.Context
             modelBuilder.ApplyConfiguration(new CaffTagConfiguration());
             modelBuilder.ApplyConfiguration(new CaffToTagConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfigration());
+            modelBuilder.ApplyConfiguration(new CaptionConfigration());
             base.OnModelCreating(modelBuilder);
         }
     }

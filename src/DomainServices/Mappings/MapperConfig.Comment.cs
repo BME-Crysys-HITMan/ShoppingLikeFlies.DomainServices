@@ -6,7 +6,9 @@ public static partial class MapperConfig
     public static IMapperConfigurationExpression ConfigureComment(this IMapperConfigurationExpression mapperConfigurationExpression)
     {
 
-        mapperConfigurationExpression.CreateMap<Comment, CommentDTO>();
+        mapperConfigurationExpression
+            .CreateMap<Comment, CommentDTO>()
+            .ReverseMap();
 
 
         //mapperConfigurationExpression.CreateMap<User, UserDto>()

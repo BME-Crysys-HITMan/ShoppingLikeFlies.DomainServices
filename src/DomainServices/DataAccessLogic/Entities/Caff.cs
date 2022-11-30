@@ -19,12 +19,14 @@ namespace DataAccessLogic.Entities
         public string Creator { get; set; }
         public ICollection<CaffToTag> Tags { get; set; }
         public string ThumbnailPath { get; set; }
+        public ICollection<Caption> Captions { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
         public override void IncludeAll(IQueryable<Caff> queryable)
         {
             queryable.Include(x => x.Tags).ThenInclude(x => x.CaffTag);
             queryable.Include(x => x.Comments);
+            queryable.Include(x => x.Captions);
         }
     }
 }
