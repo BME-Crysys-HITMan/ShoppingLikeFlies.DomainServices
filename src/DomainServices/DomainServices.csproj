@@ -17,13 +17,17 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="DomainServices.UnitTest" />
 		<InternalsVisibleTo Include="DomainServices.IntegrationTest" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="12.0.0" />
+	  <PackageReference Include="CliWrap" Version="3.5.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
 	  <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.11" />
 	  <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+	  <PackageReference Include="SkiaSharp" Version="2.88.3" />
+	  <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.3" />
 	</ItemGroup>
 
 	<ItemGroup>
