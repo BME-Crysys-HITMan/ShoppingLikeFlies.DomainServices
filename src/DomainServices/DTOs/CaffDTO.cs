@@ -13,5 +13,6 @@
         public List<CaffTagDTO> Tags { get; set; }
         public string ThumbnailPath { get; set; }
         public List<CommentDTO> Comments { get; set; }
+        public List<CaptionDTO> Captions { get; set; }
     }
 }
