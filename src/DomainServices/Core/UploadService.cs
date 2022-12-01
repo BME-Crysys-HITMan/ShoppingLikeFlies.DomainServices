@@ -13,7 +13,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
         private UploadServiceOptions options;
         private BlobServiceClient blobServiceClient;
         private string blobContainerName="caff_container";
-        public UploadService(UploadService options, string connectionString)
+        public UploadService(UploadServiceOptions options, string connectionString)
         {
             this.options = options;
 
@@ -23,20 +23,24 @@ namespace ShoppingLikeFiles.DomainServices.Core
         }
         public async Task<string> UploadFileAsync(byte[] filecontent)
         {
-            string filename =  Guid.NewGuid().ToString() + ".caff";
+            string fileName =  Guid.NewGuid().ToString() + ".caff";
             string location = $"{options.DirectoryPath}/{fileName}";
 
 
             try
             {
+                
                 if (!this.options.ShouldUploadToAzure)
                 {
-                    while (File.Exists(location))
+                    using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
                     {
-                        filename = Guid.NewGuid().ToString();
-                        location = $"{options.DirectoryPath}/{fileName}";
+                        while (File.Exists(location))
+                        {
+                            fileName = Guid.NewGuid().ToString();
+                            location = $"{options.DirectoryPath}/{fileName}";
+                        }
+                        stream.Write(filecontent, 0, filecontent.Length);
                     }
-                    stream.Write(bytes, 0, filecontent.Length);
                 }
                 else
                 {
@@ -45,7 +49,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
 
                     while (blockBlobClient.exists())
                     {
-                        filename = Guid.NewGuid().ToString();
+                        fileName = Guid.NewGuid().ToString();
                         blockBlobClient = containerClient.GetBlockBlobClient(fileName);
                     }
 
@@ -60,7 +64,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
             }
             catch(IOException e)
             {
-               Console.WriteLine("Error occured during file save: " + e.Message());
+               Console.WriteLine("Error occured during file save: " + e.Message);
             }
 
             return location;
@@ -79,18 +83,22 @@ namespace ShoppingLikeFiles.DomainServices.Core
                     else
                     {
                         Console.WriteLine("File not found");
+                        return false;
                     }
                 }
                 else
                 {
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainerName);
-                    BlockBlobClient blockBlobClient = containerClient.GetBlockBlobClient(fileName);
+                    BlockBlobClient blockBlobClient = containerClient.GetBlockBlobClient(fileLocation);
                     blockBlobClient.DeleteIfExists();
                 }
+                return true;
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error occured during file deletion: " + e.Message());
+                Console.WriteLine("Error occured during file deletion: " + e.Message);
+               
+                return false;
             }
 
         }

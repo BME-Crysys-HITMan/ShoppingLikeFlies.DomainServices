@@ -13,7 +13,7 @@ namespace ShoppingLikeFiles.DomainServices.Service
         {
             this.dataService = dataService;
         }
-        async Task<bool> BuyItemAsync(int userId, int price, int caffId)
+        public async Task<bool> BuyItemAsync(int userId, int price, int caffId)
         {
             if (price < 0)
                 return false;
