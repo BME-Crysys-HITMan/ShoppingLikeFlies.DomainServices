@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingLikeFiles.DomainServices.Options
 {
-    class UploadServiceOptions
+    public class UploadServiceOptions
     {
         public string DirectoryPath { get; set; }
         public bool ShouldUploadToAzure { get; set; }

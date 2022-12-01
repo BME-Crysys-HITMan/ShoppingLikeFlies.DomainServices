@@ -29,7 +29,7 @@ public static class CaffProcessorServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddCaffProcessor(this IServiceCollection services, Action<CaffValidatorOptions> setupAction, IConfiguration configuration)
+    public static IServiceCollection AddCaffProcessor(this IServiceCollection services, Action<CaffValidatorOptions> setupAction, Action<UploadServiceOptions> uploadActions, IConfiguration configuration)
     {
         if (services == null)
         {
@@ -41,8 +41,14 @@ public static class CaffProcessorServiceCollectionExtensions
             throw new ArgumentNullException(nameof(setupAction));
         }
 
+        if(uploadActions == null)
+        {
+            throw new ArgumentNullException(nameof(uploadActions));
+        }
+
         services.AddCaffProcessor(configuration);
         services.Configure(setupAction);
+        services.Configure(uploadActions);
 
         return services;
     }

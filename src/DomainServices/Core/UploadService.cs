@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Specialized;
 
 namespace ShoppingLikeFiles.DomainServices.Core
 {
@@ -47,7 +49,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainerName);
                     BlockBlobClient blockBlobClient = containerClient.GetBlockBlobClient(fileName);
 
-                    while (blockBlobClient.exists())
+                    while (blockBlobClient.Exists())
                     {
                         fileName = Guid.NewGuid().ToString();
                         blockBlobClient = containerClient.GetBlockBlobClient(fileName);
