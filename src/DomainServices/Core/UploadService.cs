@@ -17,7 +17,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
         private BlobServiceClient blobServiceClient;
         private string blobContainerName="caff_container";
         private ILogger logger;
-        public UploadService(ILogger logger, UploadServiceOptions options, string connectionString)
+        public UploadService(ILogger<UploadService> logger, UploadServiceOptions options, string connectionString)
         {
             this.logger = logger;
             this.options = options;
