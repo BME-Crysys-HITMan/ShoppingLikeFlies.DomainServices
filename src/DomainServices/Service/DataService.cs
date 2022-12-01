@@ -26,7 +26,7 @@ namespace ShoppingLikeFiles.DomainServices.Service
             => await _genericRepository.RemoveAsync(id);
         public async Task UpdateCaffAsync(CaffDTO caffDTO)
             => await _genericRepository.UpdateAsync(_mapper.Map<Caff>(caffDTO));
-        public async Task<List<CaffDTO>> AsyncGetAll() 
+        public async Task<List<CaffDTO>> GetAllAsync() 
             => _mapper.Map<List<CaffDTO>>(await _genericRepository.GetAllAsync());
 
         public async Task<CaffDTO> GetCaffAsync(int id)
