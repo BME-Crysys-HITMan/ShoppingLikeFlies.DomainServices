@@ -140,7 +140,7 @@ public class CaffValidatorUnitTest
                 throw new Exception("Validator not found!");
             }
 
-            return file;
+            return "/home/runner/work/ShoppingLikeFlies.DomainServices/ShoppingLikeFlies.DomainServices/test/DomainServices.UnitTest/CAFF_Processor";
         }
 
         [Fact]
