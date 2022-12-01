@@ -10,5 +10,7 @@ internal interface IUploadService
     /// </summary>
     /// <returns></returns>
     Task<string> UploadFileAsync(string filename, byte[] filecontent);
+    Task<string> UploadFileAsync(byte[] fileContent);
+    string UploadFile(byte[] fileContent);
     Task<bool> RemoveFileAsync(string fileLocation);
 }

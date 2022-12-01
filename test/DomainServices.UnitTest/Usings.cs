@@ -1,8 +1,6 @@
-global using Xunit;
-global using System;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Text;
-global using System.Threading.Tasks;
 global using FluentAssertions;
+global using Moq;
+global using ShoppingLikeFiles.DomainServices.Core;
+global using ShoppingLikeFiles.DomainServices.Core.Internal;
 global using ShoppingLikeFiles.DomainServices.Service;
+global using Xunit;
