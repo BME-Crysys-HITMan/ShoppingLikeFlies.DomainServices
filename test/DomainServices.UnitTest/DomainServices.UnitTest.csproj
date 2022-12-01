@@ -26,4 +26,19 @@
     <ProjectReference Include="..\..\src\DomainServices\DomainServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="CAFF_Processor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="invalid.caff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="validfile.caff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CAFF_Processor.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
