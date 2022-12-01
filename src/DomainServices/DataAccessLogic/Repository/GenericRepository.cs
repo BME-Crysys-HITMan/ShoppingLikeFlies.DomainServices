@@ -23,8 +23,8 @@ namespace DataAccessLogic.Repository
             _entitiySet = _dbContext.Set<T>();
         }
 
-        public async Task AddAsync(T entity)
-            => await _dbContext.AddAsync(entity);
+        public async Task<int> AddAsync(T entity)
+            => (await _dbContext.AddAsync(entity)).Entity.Id;
 
         public async Task AddRangeAsync(IEnumerable<T> entities)
             => await _dbContext.AddRangeAsync(entities);
@@ -49,10 +49,13 @@ namespace DataAccessLogic.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(int id)
         {
             var entity = await GetAsync(id);
+            if (entity == null)
+                return false;
             await RemoveAsync(entity);
+            return true;
         }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entities)

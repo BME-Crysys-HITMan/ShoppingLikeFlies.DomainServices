@@ -8,9 +8,10 @@ namespace ShoppingLikeFiles.DomainServices.Service;
 /// </summary>
 public interface IDataService
 {
-    Task<Guid> CreateCaff(CreateCaffContract contract);
-    Task<bool> DeleteCaff(Guid id);
-    Task<List<CaffResponse>> SearchCaff(string? creator = null, string? caption = null, string[]? tags = null);
-    Task<CaffDTO> AsyncGetCaff(int id);
-    Task<List<CaffResponse>> GetAll();
+    Task<int> CreateCaffAsync(CreateCaffContractDTO contract);
+    Task<bool> DeleteCaffAsync(int id);
+    Task UpdateCaffAsync(CaffDTO caffDTO);
+    Task<List<CaffDTO>> SearchCaffAsync(CaffSearchDTO caffSearchDTO);
+    Task<CaffDTO> GetCaffAsync(int id);
+    Task<List<CaffDTO>> GetAllAsync();
 }
