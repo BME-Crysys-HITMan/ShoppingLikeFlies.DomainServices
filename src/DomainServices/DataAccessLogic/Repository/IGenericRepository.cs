@@ -11,7 +11,7 @@ namespace DataAccessLogic.Repository
     public interface IGenericRepository<T> where T : EntityBase<T>, new()
     {
         IQueryable<T> GetQueryable();
-        Task RemoveAsync(int id);
+        Task<bool> RemoveAsync(int id);
         Task RemoveAsync(T entity);
         Task RemoveRangeAsync(IEnumerable<T> entities);
         Task UpdateAsync(T entity);
@@ -20,7 +20,7 @@ namespace DataAccessLogic.Repository
         Task<T> GetAsync(Expression<Func<T, bool>> expression);
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression);
-        Task AddAsync(T entity);
+        Task<int> AddAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);
     }
 }

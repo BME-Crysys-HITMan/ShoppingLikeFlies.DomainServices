@@ -9,26 +9,20 @@ using System.Threading.Tasks;
 
 namespace DataAccessLogic.Configurations
 {
-    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
+    public class CaptionConfiguration : IEntityTypeConfiguration<Caption>
     {
-        public void Configure(EntityTypeBuilder<Comment> builder)
+        public void Configure(EntityTypeBuilder<Caption> builder)
         {
             builder.Property(x => x.Text)
                 //.HasMaxLength(256)
                 .IsUnicode(false)
                 .IsRequired();
 
-
             builder.HasOne(x => x.Caff)
-                .WithMany(x => x.Comments)
+                .WithMany(x => x.Captions)
                 .HasForeignKey(x => x.CaffId)
-                .HasConstraintName($"fk{nameof(Comment)}To{nameof(Caff)}")
-                .OnDelete(DeleteBehavior.ClientCascade);
-
-           /* builder.HasOne(x => x.User)
-                .HasForeignKey(x => x.UserId)
-                .HasConstraintName($"fk{nameof(Comment)}To{nameof(User)}")
-                .OnDelete(DeleteBehavior.ClientCascade);*/
+                .HasConstraintName($"fk{nameof(Caption)}To{nameof(Caff)}")
+                .OnDelete(DeleteBehavior.ClientCascade); 
         }
     }
 }
