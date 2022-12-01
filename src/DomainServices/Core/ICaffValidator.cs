@@ -2,7 +2,7 @@
 
 public interface ICaffValidator
 {
-    bool ValidateFile(string fileName);
-    Task<bool> ValidateFileAsync(string fileName);
+    bool ValidateFile(string caffFilePath);
+    Task<bool> ValidateFileAsync(string caffFilePath);
 }
 
