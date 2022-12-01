@@ -5,6 +5,7 @@
 /// </summary>
 internal interface IUploadService
 {
-    Task<string> UploadFileAsync();
+    Task<string> UploadFileAsync(byte[] fileContent, string name);
     Task<bool> RemoveFileAsync(string fileLocation);
+    string UploadFile(byte[] fileContent, string name);
 }

@@ -9,5 +9,5 @@ public interface IPaymentService
     /// <param name="price">Price that the user is paying</param>
     /// <param name="caffId">Id of the caff file</param>
     /// <returns>Returns ture if user is able to purchase the item with the given money. Otherwise return false.</returns>
-    Task<bool> BuyItemAsync(Guid userId, int price, Guid caffId);
+    Task<bool> BuyItemAsync(int userId, int price, int caffId);
 }
