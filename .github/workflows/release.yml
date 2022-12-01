@@ -23,8 +23,8 @@ jobs:
       run: dotnet restore $SOLUTION
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=${{github.event.release.tag_name}} --no-restore
-    - name: Run tests
-      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-restore --no-build --verbosity normal
+   # - name: Run tests
+   #   run: dotnet test /p:Configuration=$BUILD_CONFIG --no-restore --no-build --verbosity normal
     - name: Publish
       run: |
         dotnet pack --configuration $BUILD_CONFIG -p:Version=${{github.event.release.tag_name}}
