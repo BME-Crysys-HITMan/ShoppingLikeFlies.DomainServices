@@ -2,6 +2,7 @@
 {
     internal interface IThumbnailGenerator
     {
-        void GenerateThumbnail();
+        string? GenerateThumbnail(string caffFilePath);
+        Task<string?> GenerateThumbnailAsync(string caffFilePath);
     }
 }
