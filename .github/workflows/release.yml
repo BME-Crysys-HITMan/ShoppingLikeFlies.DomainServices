@@ -28,4 +28,4 @@ jobs:
     - name: Publish
       run: |
         dotnet pack --configuration $BUILD_CONFIG -p:Version=${{github.event.release.tag_name}}
-        nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
+        nuget push **\Crysis.HITmen.ShoppingLikeFiles.DomainServices*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
