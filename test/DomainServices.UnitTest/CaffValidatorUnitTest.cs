@@ -133,7 +133,7 @@ public class CaffValidatorUnitTest
 
             Func<Task<bool>> act = () => validator.ValidateFileAsync("nonexisting.caff");
 
-            await act.Should().CompleteWithinAsync(500.Milliseconds()).WithResult(false);
+            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(false);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ public class CaffValidatorUnitTest
 
             Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("invalid.caff"));
 
-            await act.Should().CompleteWithinAsync(500.Milliseconds()).WithResult(false);
+            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(false);
         }
 
         [Fact]
@@ -153,7 +153,7 @@ public class CaffValidatorUnitTest
 
             Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("validfile.caff"));
 
-            await act.Should().CompleteWithinAsync(500.Milliseconds()).WithResult(true);
+            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(true);
         }
 
         [Fact]
@@ -192,7 +192,7 @@ public class CaffValidatorUnitTest
 
             Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("validfile.caff"));
 
-            await act.Should().CompleteWithinAsync(500.Milliseconds()).WithResult(true);
+            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(true);
         }
 
         private static ServiceProvider GetServiceProvider()

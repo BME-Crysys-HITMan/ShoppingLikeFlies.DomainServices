@@ -28,7 +28,7 @@ public class ThumbnailGeneratorUnitTest
 
             Func<Task<string?>> act = () => scenario.Generator.GenerateThumbnailAsync(GetFile("validfile.caff"));
 
-            await act.Should().CompleteWithinAsync(1.Seconds()).WithResult(expected);
+            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(expected);
         }
     }
 
