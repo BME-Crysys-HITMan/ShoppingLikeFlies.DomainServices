@@ -1,4 +1,6 @@
 ﻿using FluentAssertions.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ShoppingLikeFiles.DomainServices.Core;
 using ShoppingLikeFiles.DomainServices.Core.Internal;
@@ -164,6 +166,57 @@ public class CaffValidatorUnitTest
             bool result = await validator.ValidateFileAsync("notexistingfile.caff");
 
             result.Should().Be(false, "Nonexistant file should not be valid");
+        }
+    }
+
+    public class DITests
+    {
+        [Fact]
+        public void TestDiSync()
+        {
+            var provider = GetServiceProvider();
+
+            using var scope = provider.CreateScope();
+
+            var validator = scope.ServiceProvider.GetRequiredService<ICaffValidator>();
+
+            validator.ValidateFile(GetFile("validfile.caff")).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task TestDiAsync()
+        {
+            var provider = GetServiceProvider();
+
+            using var scope = provider.CreateScope();
+
+            var validator = scope.ServiceProvider.GetRequiredService<ICaffValidator>();
+
+            Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("validfile.caff"));
+
+            await act.Should().CompleteWithinAsync(500.Milliseconds()).WithResult(true);
+        }
+
+        private static ServiceProvider GetServiceProvider()
+        {
+            var inMemorySettings = new Dictionary<string, string>
+            {
+                {"key", "value" },
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
+
+            var services = new ServiceCollection();
+
+            services.AddCaffProcessor(x =>
+            {
+                x.Validator = validatorPath();
+                x.GeneratorDir = "";
+            }, configuration);
+
+            return services.BuildServiceProvider();
         }
     }
 
