@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingLikeFiles.DomainServices.Options
 {
@@ -16,9 +11,20 @@ namespace ShoppingLikeFiles.DomainServices.Options
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if(options.Validator == null)
+            if (options.Validator == null)
             {
-                options.Validator = "my_validator";
+                options.Validator = "CAFF_Processor";
+            }
+
+            if (string.IsNullOrEmpty(options.GeneratorDir))
+            {
+                string cwd = Directory.GetCurrentDirectory();
+
+                Directory.CreateDirectory(cwd + "/generated");
+
+                var dirs = Directory.GetDirectories(cwd, "generated");
+
+                options.GeneratorDir = dirs.First();
             }
         }
     }

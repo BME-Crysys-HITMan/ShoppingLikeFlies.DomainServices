@@ -6,6 +6,7 @@ using ShoppingLikeFiles.DomainServices.Core;
 using ShoppingLikeFiles.DomainServices.Core.Internal;
 using ShoppingLikeFiles.DomainServices.Mappings;
 using ShoppingLikeFiles.DomainServices.Options;
+using ShoppingLikeFiles.DomainServices.Service;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +26,9 @@ public static class CaffProcessorServiceCollectionExtensions
             ServiceDescriptor.Transient<IConfigureOptions<UploadServiceOptions>, UploadServiceOptionsSetup>());
 
         services.TryAddSingleton<ICaffValidator, DefaultCaffValidator>();
+        services.TryAddSingleton<IThumbnailGenerator, DefaultThumbnailGenerator>();
+        services.TryAddScoped<ICaffService, CaffService>();
+        services.TryAddTransient<IUploadService, UploadService>();
 
         services.AddDataAccessLayer(configuration);
         services.AddSingleton(_ => MapperConfig.ConfigureAutoMapper());
@@ -44,7 +48,7 @@ public static class CaffProcessorServiceCollectionExtensions
             throw new ArgumentNullException(nameof(setupAction));
         }
 
-        if(uploadActions == null)
+        if (uploadActions == null)
         {
             throw new ArgumentNullException(nameof(uploadActions));
         }
