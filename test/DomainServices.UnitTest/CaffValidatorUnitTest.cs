@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ShoppingLikeFiles.DomainServices.Core;
-using ShoppingLikeFiles.DomainServices.Core.Internal;
 using ShoppingLikeFiles.DomainServices.Options;
 
 namespace DomainServices.UnitTest;
@@ -214,6 +212,10 @@ public class CaffValidatorUnitTest
             {
                 x.Validator = validatorPath();
                 x.GeneratorDir = "";
+            }, f =>
+            {
+                f.ShouldUploadToAzure = false;
+                f.DirectoryPath = "generated";
             }, configuration);
 
             return services.BuildServiceProvider();

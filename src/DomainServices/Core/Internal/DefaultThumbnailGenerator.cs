@@ -159,7 +159,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         var filename = GetFileName(pixelFile);
 
-        return await _uploadService.UploadFileAsync(data); //TODO _uploadService.UploadFileAsync(data, filename);
+        return await _uploadService.UploadFileAsync(data, filename);
     }
 
     private string? ProcessPixel(string pixelFile)
@@ -173,7 +173,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         var fileName = GetFileName(pixelFile);
 
-        return _uploadService.UploadFile(data); //TODO _uploadService.UploadFile(data, fileName);
+        return _uploadService.UploadFile(data, fileName);
     }
 
     private byte[] GenerateJpeg(string filename)

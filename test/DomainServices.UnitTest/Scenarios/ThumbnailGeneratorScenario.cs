@@ -10,8 +10,8 @@ internal class ThumbnailGeneratorScenario
     {
         upload = new Mock<IUploadService>();
 
-        upload.Setup(x => x.UploadFileAsync(It.IsAny<byte[]>())).Returns(Task.FromResult(expectedFileName));
-        upload.Setup(x => x.UploadFile(It.IsAny<byte[]>())).Returns(expectedFileName);
+        upload.Setup(x => x.UploadFileAsync(It.IsAny<byte[]>(), It.IsAny<string>())).Returns(Task.FromResult(expectedFileName));
+        upload.Setup(x => x.UploadFile(It.IsAny<byte[]>(), It.IsAny<string>())).Returns(expectedFileName);
 
         var cwd = Directory.GetCurrentDirectory();
 
