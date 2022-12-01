@@ -1,6 +1,8 @@
 ﻿using FluentAssertions.Extensions;
+using Microsoft.Extensions.Options;
 using ShoppingLikeFiles.DomainServices.Core;
 using ShoppingLikeFiles.DomainServices.Core.Internal;
+using ShoppingLikeFiles.DomainServices.Options;
 
 namespace DomainServices.UnitTest;
 
@@ -25,40 +27,40 @@ public class CaffValidatorUnitTest
             Action action = () => validator = new DefaultCaffValidator(arg);
 
             action.Should().Throw<ArgumentNullException>();
+        }
 
+        [Fact]
+        public void Test_ShouldThrow_ArgumentNull_3()
+        {
+            IOptions<CaffValidatorOptions>? options = null;
+            ICaffValidator validator;
+            Action act = () => validator = new DefaultCaffValidator(options);
+
+            act.Should().ThrowExactly<ArgumentNullException>();
+        }
+        [Fact]
+        public void Test_ShouldThrow_ArgumentNull_4()
+        {
+            IOptions<CaffValidatorOptions> options = Options.Create(new CaffValidatorOptions() { Validator = null });
+            ICaffValidator validator;
+            Action act = () => validator = new DefaultCaffValidator(options);
+
+            act.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Test_ShouldNotThrow()
+        {
+            IOptions<CaffValidatorOptions> options = Options.Create(new CaffValidatorOptions() { Validator = "Valami" });
+            ICaffValidator validator;
+            Action act = () => validator = new DefaultCaffValidator(options);
+
+            act.Should().NotThrow<ArgumentNullException>();
         }
     }
 
     public class CaffValidatorSyncUnitTest
     {
-        private string validatorPath()
-        {
-            var cwd = Directory.GetCurrentDirectory();
-
-            var files = Directory.EnumerateFiles(cwd, "CAFF_Proc*");
-
-            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(osPlatform: System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                if (files.Any(f => f.EndsWith(".exe")))
-                {
-                    return files.First(f => f.EndsWith(".exe"));
-                }
-
-                throw new Exception("Validator not found!");
-            }
-
-            var file = files.FirstOrDefault(f => !f.EndsWith(".exe"));
-
-            if (string.IsNullOrEmpty(file))
-            {
-                throw new Exception("Validator not found!");
-            }
-
-            return file;
-            //return "Z:\\BME\\MSc\\SzamBiz\\ShoppingLikeFiles-NativeComponent\\cmake-build-debug\\CAFF_Processor.exe";
-        }
-
-
         [Fact]
         public void Test1()
         {
@@ -100,48 +102,19 @@ public class CaffValidatorUnitTest
             result.Should().Be(true, "A valid file should not be invalid");
         }
 
-        private string GetFile(string testname)
+        [Fact]
+        public void Test5()
         {
-            var cwd = Directory.GetCurrentDirectory();
+            ICaffValidator validator = new DefaultCaffValidator("nonexistant_validator");
 
-            var files = Directory.EnumerateFiles(cwd, "*.caff");
+            bool result = validator.ValidateFile("notexistingfile.caff");
 
-            if (files.Any(f => f.EndsWith(testname)))
-            {
-                return files.First(f => f.EndsWith(testname));
-            }
-
-            return "";
+            result.Should().Be(false, "Nonexistant file should not be valid");
         }
     }
 
     public class CaffValidatorAsyncUnitTest
     {
-        private string validatorPath()
-        {
-            var cwd = Directory.GetCurrentDirectory();
-
-            var files = Directory.EnumerateFiles(cwd, "CAFF_Proc*");
-
-            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(osPlatform: System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                if (files.Any(f => f.EndsWith(".exe")))
-                {
-                    return files.First(f => f.EndsWith(".exe"));
-                }
-
-                throw new Exception("Validator not found!");
-            }
-
-            var file = files.FirstOrDefault(f => !f.EndsWith(".exe"));
-
-            if (string.IsNullOrEmpty(file))
-            {
-                throw new Exception("Validator not found!");
-            }
-
-            return "/home/runner/work/ShoppingLikeFlies.DomainServices/ShoppingLikeFlies.DomainServices/test/DomainServices.UnitTest/CAFF_Processor";
-        }
 
         [Fact]
         public async Task Test1()
@@ -182,6 +155,16 @@ public class CaffValidatorUnitTest
 
             await act.Should().CompleteWithinAsync(500.Milliseconds()).WithResult(true);
         }
+
+        [Fact]
+        public async Task Test5()
+        {
+            ICaffValidator validator = new DefaultCaffValidator("nonexistant_validator");
+
+            bool result = await validator.ValidateFileAsync("notexistingfile.caff");
+
+            result.Should().Be(false, "Nonexistant file should not be valid");
+        }
     }
 
     internal static string GetFile(string testname)
@@ -196,5 +179,32 @@ public class CaffValidatorUnitTest
         }
 
         return "";
+    }
+
+    private static string validatorPath()
+    {
+        var cwd = Directory.GetCurrentDirectory();
+
+        var files = Directory.EnumerateFiles(cwd, "CAFF_Proc*");
+
+        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(osPlatform: System.Runtime.InteropServices.OSPlatform.Windows))
+        {
+            if (files.Any(f => f.EndsWith(".exe")))
+            {
+                return files.First(f => f.EndsWith(".exe"));
+            }
+
+            throw new Exception("Validator not found!");
+        }
+
+        var file = files.FirstOrDefault(f => !f.EndsWith(".exe"));
+
+        if (string.IsNullOrEmpty(file))
+        {
+            throw new Exception("Validator not found!");
+        }
+
+        return file;
+        //return "Z:\\BME\\MSc\\SzamBiz\\ShoppingLikeFiles-NativeComponent\\cmake-build-debug\\CAFF_Processor.exe";
     }
 }
