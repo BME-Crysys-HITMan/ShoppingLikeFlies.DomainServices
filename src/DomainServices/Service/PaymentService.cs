@@ -17,7 +17,7 @@ namespace ShoppingLikeFiles.DomainServices.Service
         {
             if (price < 0)
                 return false;
-            CaffDTO caffDTO = await this.dataService.AsyncGetCaff(caffId);
+            CaffDTO caffDTO = await this.dataService.GetCaffAsync(caffId);
             if (caffDTO == null)
                 return false;
             return true;

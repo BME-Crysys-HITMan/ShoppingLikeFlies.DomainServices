@@ -1,6 +1,7 @@
 ﻿using DataAccessLogic.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using ShoppingLikeFiles.DomainServices.Core;
 using ShoppingLikeFiles.DomainServices.Core.Internal;
 using ShoppingLikeFiles.DomainServices.Mappings;
@@ -17,9 +18,11 @@ public static class CaffProcessorServiceCollectionExtensions
             throw new ArgumentNullException(nameof(services));
         }
 
+        services.TryAddEnumerable(
+            ServiceDescriptor.Transient<IConfigureOptions<CaffValidatorOptions>, CaffValidatorOptionsSetup>());
 
-
-        //services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<CaffValidatorOptions>, CaffValidatorOptions>());
+        services.TryAddEnumerable(
+            ServiceDescriptor.Transient<IConfigureOptions<UploadServiceOptions>, UploadServiceOptionsSetup>());
 
         services.TryAddSingleton<ICaffValidator, DefaultCaffValidator>();
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
+using Microsoft.Extensions.Logging;
 
 namespace ShoppingLikeFiles.DomainServices.Core
 {
@@ -15,8 +16,10 @@ namespace ShoppingLikeFiles.DomainServices.Core
         private UploadServiceOptions options;
         private BlobServiceClient blobServiceClient;
         private string blobContainerName="caff_container";
-        public UploadService(UploadServiceOptions options, string connectionString)
+        private ILogger logger;
+        public UploadService(ILogger logger, UploadServiceOptions options, string connectionString)
         {
+            this.logger = logger;
             this.options = options;
 
             //create containerClient
@@ -65,7 +68,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
             }
             catch(IOException e)
             {
-               Console.WriteLine("Error occured during file save: " + e.Message);
+                logger.LogError(e, "Error occured during file save");
                 return String.Empty;
             }
         }
@@ -78,11 +81,11 @@ namespace ShoppingLikeFiles.DomainServices.Core
                     if (File.Exists(fileLocation))
                     {
                         File.Delete(fileLocation);
-                        Console.WriteLine("File deleted");
+                        logger.LogInformation("File deleted");
                     }
                     else
                     {
-                        Console.WriteLine("File not found");
+                        logger.LogInformation("File not found");
                         return false;
                     }
                 }
@@ -96,7 +99,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error occured during file deletion: " + e.Message);
+                logger.LogError(e, "Error occured during file deletion: " + e.Message);
                
                 return false;
             }
@@ -143,7 +146,7 @@ namespace ShoppingLikeFiles.DomainServices.Core
             }
             catch (IOException e)
             {
-                Console.WriteLine("Error occured during file save: " + e.Message);
+                logger.LogError(e, "Error occured during file save: " + e.Message);
                 return String.Empty;
             }
         }
