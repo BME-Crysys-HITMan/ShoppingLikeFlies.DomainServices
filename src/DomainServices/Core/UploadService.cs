@@ -23,36 +23,34 @@ namespace ShoppingLikeFiles.DomainServices.Core
             blobServiceClient = new BlobServiceClient(connectionString);
             
         }
-        public async Task<string> UploadFileAsync(byte[] filecontent)
+
+        public async Task<string> UploadFileAsync(byte[] filecontent, string fileName)
         {
-            string fileName =  Guid.NewGuid().ToString() + ".caff";
-            string location = $"{options.DirectoryPath}/{fileName}";
-
-
+            
             try
             {
-                
+                string location = $"{options.DirectoryPath}/{fileName}";
                 if (!this.options.ShouldUploadToAzure)
                 {
                     using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
                     {
-                        while (File.Exists(location))
+                        if(File.Exists(location))
                         {
-                            fileName = Guid.NewGuid().ToString();
-                            location = $"{options.DirectoryPath}/{fileName}";
+                            throw new ArgumentException("File name already exists!");
                         }
+                            
                         stream.Write(filecontent, 0, filecontent.Length);
                     }
+                    return fileName;
                 }
                 else
                 {
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainerName);
                     BlockBlobClient blockBlobClient = containerClient.GetBlockBlobClient(fileName);
 
-                    while (blockBlobClient.Exists())
+                    if (blockBlobClient.Exists())
                     {
-                        fileName = Guid.NewGuid().ToString();
-                        blockBlobClient = containerClient.GetBlockBlobClient(fileName);
+                        throw new ArgumentException("File name already exists!");
                     }
 
                     using (Stream stream = await blockBlobClient.OpenWriteAsync(true))
@@ -62,14 +60,14 @@ namespace ShoppingLikeFiles.DomainServices.Core
                             await stream.CopyToAsync(fileStream);   
                         }
                     }
+                    return fileName;
                 }
             }
             catch(IOException e)
             {
                Console.WriteLine("Error occured during file save: " + e.Message);
+                return String.Empty;
             }
-
-            return location;
         }
         public async Task<bool> RemoveFileAsync(string fileLocation)
         {
@@ -103,6 +101,51 @@ namespace ShoppingLikeFiles.DomainServices.Core
                 return false;
             }
 
+        }
+
+        public string UploadFile(byte[] filecontent, string fileName)
+        {
+            try
+            {
+                string location = $"{options.DirectoryPath}/{fileName}";
+                if (!this.options.ShouldUploadToAzure)
+                {
+                    using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                    {
+                        if (File.Exists(location))
+                        {
+                            throw new ArgumentException("File name already exists!");
+                        }
+
+                        stream.Write(filecontent, 0, filecontent.Length);
+                    }
+                    return fileName;
+                }
+                else
+                {
+                    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(blobContainerName);
+                    BlockBlobClient blockBlobClient = containerClient.GetBlockBlobClient(fileName);
+
+                    if (blockBlobClient.Exists())
+                    {
+                        throw new ArgumentException("File name already exists!");
+                    }
+
+                    using (Stream stream = blockBlobClient.OpenWrite(true))
+                    {
+                        using (var fileStream = new MemoryStream(filecontent))
+                        {
+                            stream.CopyTo(fileStream);
+                        }
+                    }
+                    return fileName;
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("Error occured during file save: " + e.Message);
+                return String.Empty;
+            }
         }
     }
 }
