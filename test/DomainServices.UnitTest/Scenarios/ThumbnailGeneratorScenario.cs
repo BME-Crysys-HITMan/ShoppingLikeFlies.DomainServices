@@ -36,7 +36,7 @@ internal class ThumbnailGeneratorScenario : IDisposable
 
     private static string GeneratePixelFile(string dir, string pixel)
     {
-        using BinaryWriter bw = new BinaryWriter(File.Open(dir + "\\" + pixel, FileMode.Create, FileAccess.Write));
+        using BinaryWriter bw = new BinaryWriter(File.Open(dir + "/" + pixel, FileMode.Create, FileAccess.Write));
         ulong width = 10, height = 10;
         byte[] w = BitConverter.GetBytes(width);
         byte[] h = BitConverter.GetBytes(height);
