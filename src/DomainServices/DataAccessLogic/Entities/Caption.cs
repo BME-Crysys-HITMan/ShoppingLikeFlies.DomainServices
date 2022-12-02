@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLogic.Entities
+namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
     public class Caption : EntityBase<Caption>
     {

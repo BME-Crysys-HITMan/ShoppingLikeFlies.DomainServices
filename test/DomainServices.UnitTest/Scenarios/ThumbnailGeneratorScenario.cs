@@ -1,56 +1,62 @@
 ﻿
 namespace DomainServices.UnitTest.Scenarios;
 
-internal class ThumbnailGeneratorScenario
+internal class ThumbnailGeneratorScenario : IDisposable
 {
+    private readonly string generatedFile;
     private readonly IThumbnailGenerator generator;
     private readonly Mock<IUploadService> upload;
-
-    public ThumbnailGeneratorScenario(string expectedFileName)
+    private readonly Mock<INativeCommunicator> nativeCommunicator;
+    /// <summary>
+    /// Scenario constructor.
+    /// </summary>
+    /// <param name="expectedFileName"> a jpeg image path</param>
+    public ThumbnailGeneratorScenario(string originalName, string expectedFileName, string generatorDir, ILogger logger)
     {
         upload = new Mock<IUploadService>();
 
         upload.Setup(x => x.UploadFileAsync(It.IsAny<byte[]>(), It.IsAny<string>())).Returns(Task.FromResult(expectedFileName));
         upload.Setup(x => x.UploadFile(It.IsAny<byte[]>(), It.IsAny<string>())).Returns(expectedFileName);
 
-        var cwd = Directory.GetCurrentDirectory();
+        nativeCommunicator = new Mock<INativeCommunicator>();
 
-        string genDir = cwd + "/generator";
+        var pixel = expectedFileName[..^5];
 
-        Directory.CreateDirectory(genDir);
+        nativeCommunicator.Setup(x => x.Communicate(It.IsAny<string>())).Returns<string?>(null);
+        nativeCommunicator.Setup(x => x.Communicate(It.Is<string>(s => s.Contains(originalName) && s.Contains(generatorDir)))).Returns(pixel);
+        nativeCommunicator.Setup(x => x.CommunicateAsync(It.IsAny<string>())).Returns<Task<string?>>(null);
+        nativeCommunicator.Setup(x => x.CommunicateAsync(It.Is<string>(s => s.Contains(originalName) && s.Contains(generatorDir)))).Returns(Task.FromResult<string?>(pixel));
 
-        var dirs = Directory.GetDirectories(cwd, "generator");
+        generator = new DefaultThumbnailGenerator(nativeCommunicator.Object, generatorDir, upload.Object, logger);
 
-        generator = new DefaultThumbnailGenerator(validatorPath(), dirs.First(), upload.Object);
+        generatedFile = GeneratePixelFile(generatorDir, pixel);
     }
 
     public IThumbnailGenerator Generator => generator;
-    public Mock<IUploadService> Upload => upload;
 
-    private static string validatorPath()
+    private static string GeneratePixelFile(string dir, string pixel)
     {
-        var cwd = Directory.GetCurrentDirectory();
-
-        var files = Directory.EnumerateFiles(cwd, "CAFF_Proc*");
-
-        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(osPlatform: System.Runtime.InteropServices.OSPlatform.Windows))
+        using BinaryWriter bw = new BinaryWriter(File.Open(dir + "\\" + pixel, FileMode.Create, FileAccess.Write));
+        ulong width = 10, height = 10;
+        byte[] w = BitConverter.GetBytes(width);
+        byte[] h = BitConverter.GetBytes(height);
+        bw.Write(w);
+        bw.Write(h);
+        Random r = new Random();
+        for (int i = 0; i < 10; ++i)
         {
-            if (files.Any(f => f.EndsWith(".exe")))
-            {
-                return files.First(f => f.EndsWith(".exe"));
-            }
-
-            throw new Exception("Validator not found!");
+            bw.Write((byte)r.Next(256));
+            bw.Write((byte)r.Next(256));
+            bw.Write((byte)r.Next(256));
         }
 
-        var file = files.FirstOrDefault(f => !f.EndsWith(".exe"));
+        var files = Directory.GetFiles(dir, pixel);
 
-        if (string.IsNullOrEmpty(file))
-        {
-            throw new Exception("Validator not found!");
-        }
+        return files.First();
+    }
 
-        return file;
-        //return "Z:\\BME\\MSc\\SzamBiz\\ShoppingLikeFiles-NativeComponent\\cmake-build-debug\\CAFF_Processor.exe";
+    public void Dispose()
+    {
+        File.Delete(generatedFile);
     }
 }

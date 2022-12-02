@@ -4,12 +4,6 @@ namespace ShoppingLikeFiles.DomainServices.Service;
 public interface ICaffService
 {
     /// <summary>
-    /// A tester method the must return "pong"
-    /// </summary>
-    /// <returns> a simple "pong" string </returns>
-    string Ping();
-
-    /// <summary>
     /// Validates a given file.
     /// </summary>
     /// <param name="caffFilePath">Name of the given file</param>
@@ -21,5 +15,8 @@ public interface ICaffService
     /// </summary>
     /// <param name="caffFilePath">The name of the file. Must be .caff conform file.</param>
     /// <returns>The filename of the generated image.</returns>
-    string GetThumbnail(string caffFilePath);
+    string? GetThumbnail(string caffFilePath);
+
+    Task<CaffCredit?> ValidateFileAsync(string caffFilePath);
+    Task<string?> GetThumbnailAsync(string caffFilePath);
 }

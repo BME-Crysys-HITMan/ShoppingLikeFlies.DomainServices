@@ -1,4 +1,6 @@
 ﻿
+using ShoppingLikeFiles.DataAccessLogic.Entities;
+
 namespace ShoppingLikeFiles.DomainServices.Mappings;
 
 public static partial class MapperConfig

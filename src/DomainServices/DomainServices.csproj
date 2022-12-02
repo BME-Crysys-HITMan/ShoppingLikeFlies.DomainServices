@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
 	  <PackageId>Crysis.HITmen.ShoppingLikeFiles.DomainServices</PackageId>
 	  <LangVersion>preview</LangVersion>
+	  <Authors>Daniel Abraham, Aron Kerekes, Norbert Tagscherer</Authors>
+	  <PackageId>Crysis.HITmen.ShoppingLikeFiles.DataAccessLogic</PackageId>
+	  <Copyright>Copyright © BME-Crysys-HITMan 2022</Copyright>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <Company>Crysys-Hitman</Company>
+	  <Product>DataAccessLogic</Product>
   </PropertyGroup>
 
   <ItemGroup>

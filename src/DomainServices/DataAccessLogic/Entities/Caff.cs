@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataAccessLogic.Entities
+namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
     public class Caff : EntityBase<Caff>
     {
@@ -14,11 +9,11 @@ namespace DataAccessLogic.Entities
             Tags = new HashSet<CaffToTag>();
             Comments = new HashSet<Comment>();
         }
-        public string FilePath { get; set; }
+        public string FilePath { get; set; } = string.Empty;
         public DateTime CreationDateTime { get; set; }
-        public string Creator { get; set; }
+        public string Creator { get; set; } = string.Empty;
         public ICollection<CaffToTag> Tags { get; set; }
-        public string ThumbnailPath { get; set; }
+        public string ThumbnailPath { get; set; } = string.Empty;
         public ICollection<Caption> Captions { get; set; }
         public ICollection<Comment> Comments { get; set; }
 

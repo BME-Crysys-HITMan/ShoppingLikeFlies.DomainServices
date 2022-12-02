@@ -1,13 +1,13 @@
-﻿using DataAccessLogic.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShoppingLikeFiles.DataAccessLogic.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLogic.Configurations
+namespace ShoppingLikeFiles.DataAccessLogic.Configurations
 {
     public class CommentConfiguration : IEntityTypeConfiguration<Comment>
     {
@@ -25,10 +25,10 @@ namespace DataAccessLogic.Configurations
                 .HasConstraintName($"fk{nameof(Comment)}To{nameof(Caff)}")
                 .OnDelete(DeleteBehavior.ClientCascade);
 
-           /* builder.HasOne(x => x.User)
-                .HasForeignKey(x => x.UserId)
-                .HasConstraintName($"fk{nameof(Comment)}To{nameof(User)}")
-                .OnDelete(DeleteBehavior.ClientCascade);*/
+            /* builder.HasOne(x => x.User)
+                 .HasForeignKey(x => x.UserId)
+                 .HasConstraintName($"fk{nameof(Comment)}To{nameof(User)}")
+                 .OnDelete(DeleteBehavior.ClientCascade);*/
         }
     }
 }

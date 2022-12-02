@@ -1,11 +1,11 @@
-﻿using DataAccessLogic.Context;
-using DataAccessLogic.Entities;
-using DataAccessLogic.Repository;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShoppingLikeFiles.DataAccessLogic.Context;
+using ShoppingLikeFiles.DataAccessLogic.Entities;
+using ShoppingLikeFiles.DataAccessLogic.Repository;
 
-namespace DataAccessLogic.Extensions
+namespace ShoppingLikeFiles.DataAccessLogic.Extensions
 {
     public static class DataAccessLogicExtensions
     {

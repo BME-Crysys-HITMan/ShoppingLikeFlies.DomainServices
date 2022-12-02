@@ -1,44 +1,29 @@
-﻿using CliWrap;
-using Microsoft.Extensions.Options;
-using ShoppingLikeFiles.DomainServices.Options;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Text;
+﻿using ShoppingLikeFiles.DomainServices.Exceptions;
+using ShoppingLikeFiles.DomainServices.Model;
 
 namespace ShoppingLikeFiles.DomainServices.Core.Internal;
 
 internal class DefaultCaffValidator : ICaffValidator
 {
-    private readonly string _validator;
+    private readonly INativeCommunicator _communicator;
+    private readonly ILogger _logger;
     private const string validateArgument = "--validate";
 
-    public DefaultCaffValidator(IOptions<CaffValidatorOptions> options)
+
+    public DefaultCaffValidator(INativeCommunicator communicator, ILogger logger)
     {
-        if (options == null)
+        if (logger is null)
         {
-            throw new ArgumentNullException(nameof(options));
+            throw new ArgumentNullException(nameof(logger));
         }
 
-        if (string.IsNullOrEmpty(options.Value.Validator))
-        {
-            throw new ArgumentNullException(nameof(options));
-        }
-
-        _validator = options.Value.Validator;
+        _logger = logger.ForContext<DefaultCaffValidator>();
+        _communicator = communicator ?? throw new ArgumentNullException(nameof(communicator));
     }
 
-    internal DefaultCaffValidator(string validator)
+    public CaffCredit? ValidateFile(string fileName)
     {
-        if (string.IsNullOrEmpty(validator))
-        {
-            throw new ArgumentNullException(nameof(validator));
-        }
-
-        _validator = validator;
-    }
-
-    public bool ValidateFile(string fileName)
-    {
+        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFile), fileName);
         string cleanFileName = fileName.Trim();
         if (string.IsNullOrEmpty(cleanFileName))
         {
@@ -46,39 +31,20 @@ internal class DefaultCaffValidator : ICaffValidator
         }
         var arguments = GetArguments(cleanFileName);
 
-        try
+        var response = _communicator.Communicate(arguments);
+
+        if (!string.IsNullOrEmpty(response))
         {
-            using Process process = new();
-            process.StartInfo.FileName = _validator;
-            process.StartInfo.Arguments = arguments;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            bool result = process.Start();
-
-            if (!result)
-            {
-                return result;
-            }
-            StreamReader reader = process.StandardOutput;
-            var line = reader.ReadLine();
-
-            process.WaitForExit();
-
-            if (line == "1")
-            {
-                return true;
-            }
-        }
-        catch (Win32Exception ex)
-        {
-            //TODO logging
+            if (response.StartsWith("0")) return null;
+            return GetCredit(response);
         }
 
-        return false;
+        return null;
     }
 
-    public Task<bool> ValidateFileAsync(string fileName)
+    public Task<CaffCredit?> ValidateFileAsync(string fileName)
     {
+        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileAsync), fileName);
         string cleanFileName = fileName.Trim();
         if (string.IsNullOrEmpty(cleanFileName))
         {
@@ -91,31 +57,47 @@ internal class DefaultCaffValidator : ICaffValidator
         return ValidateFileInternalAsync(cleanFileName);
     }
 
-    private async Task<bool> ValidateFileInternalAsync(string filename)
+    private async Task<CaffCredit?> ValidateFileInternalAsync(string filename)
     {
-        var output = new StringBuilder();
-        try
-        {
-            await Cli.Wrap(_validator)
-            .WithArguments(GetArguments(filename))
-            .WithStandardOutputPipe(PipeTarget.ToStringBuilder(output))
-            .ExecuteAsync();
+        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileInternalAsync), filename);
 
-            var response = output.ToString().Trim();
+        var response = await _communicator.CommunicateAsync(GetArguments(filename));
 
-            if (response == "1")
-            {
-                return true;
-            }
-        }
-        catch (Win32Exception ex)
+        if (!string.IsNullOrEmpty(response))
         {
-            //TODO logging
+            if (response.StartsWith("0")) return null;
+            return GetCredit(response);
         }
 
-        return false;
+        return null;
     }
 
     private string GetArguments(string filename) => $"{filename} {validateArgument}";
+
+    private CaffCredit GetCredit(string response)
+    {
+        var lines = response.Split("\r\n");
+
+        string[] date = lines[1].Split(":");
+
+        if (date.Length != 5)
+            throw new InvalidCaffException();
+
+        ushort y = ushort.Parse(date[0]);
+        byte m = byte.Parse(date[1]);
+        byte d = byte.Parse(date[2]);
+        byte h = byte.Parse(date[3]);
+        byte mm = byte.Parse(date[4]);
+
+        string creator = lines[2];
+
+        var tags = lines[3].Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
+
+        CaffCredit credit = new CaffCredit(y, m, d, h, mm, creator);
+
+        credit.Tags = tags;
+
+        return credit;
+    }
 }
 

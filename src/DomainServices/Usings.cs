@@ -1,4 +1,4 @@
 ﻿global using AutoMapper;
-global using DataAccessLogic.Entities;
+global using Serilog;
+global using ShoppingLikeFiles.DataAccessLogic.Entities;
 global using ShoppingLikeFiles.DomainServices.DTOs;
-

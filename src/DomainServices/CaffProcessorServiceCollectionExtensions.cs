@@ -1,7 +1,7 @@
-﻿using DataAccessLogic.Extensions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using ShoppingLikeFiles.DataAccessLogic.Extensions;
 using ShoppingLikeFiles.DomainServices.Core;
 using ShoppingLikeFiles.DomainServices.Core.Internal;
 using ShoppingLikeFiles.DomainServices.Mappings;
@@ -25,8 +25,9 @@ public static class CaffProcessorServiceCollectionExtensions
         services.TryAddEnumerable(
             ServiceDescriptor.Transient<IConfigureOptions<UploadServiceOptions>, UploadServiceOptionsSetup>());
 
-        services.TryAddSingleton<ICaffValidator, DefaultCaffValidator>();
-        services.TryAddSingleton<IThumbnailGenerator, DefaultThumbnailGenerator>();
+        services.TryAddSingleton<INativeCommunicator, NativeCommunicator>();
+        services.TryAddTransient<ICaffValidator, DefaultCaffValidator>();
+        services.TryAddTransient<IThumbnailGenerator, DefaultThumbnailGenerator>();
         services.TryAddScoped<ICaffService, CaffService>();
         services.TryAddTransient<IUploadService, UploadService>();
 

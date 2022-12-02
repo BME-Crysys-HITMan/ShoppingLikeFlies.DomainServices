@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccessLogic.Entities;
+using ShoppingLikeFiles.DataAccessLogic.Entities;
 using ShoppingLikeFiles.DomainServices.Contract.Incoming;
 using ShoppingLikeFiles.DomainServices.DTOs;
 using System;
