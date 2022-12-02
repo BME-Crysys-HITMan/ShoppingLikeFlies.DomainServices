@@ -21,6 +21,10 @@
     <None Remove="DataAccessLogic\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="README.md" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<InternalsVisibleTo Include="DomainServices.UnitTest" />
 		<InternalsVisibleTo Include="DomainServices.IntegrationTest" />
@@ -42,5 +46,9 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="DataAccessLogic\DataAccessLogic.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 </Project>
