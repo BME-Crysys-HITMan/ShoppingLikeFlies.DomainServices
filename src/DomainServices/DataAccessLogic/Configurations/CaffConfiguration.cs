@@ -1,8 +1,8 @@
-﻿using DataAccessLogic.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShoppingLikeFiles.DataAccessLogic.Entities;
 
-namespace DataAccessLogic.Configurations
+namespace ShoppingLikeFiles.DataAccessLogic.Configurations
 {
     public class CaffConfiguration : IEntityTypeConfiguration<Caff>
     {

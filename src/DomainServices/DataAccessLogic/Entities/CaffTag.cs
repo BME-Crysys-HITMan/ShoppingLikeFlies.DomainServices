@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLogic.Entities
+namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
     public class CaffTag : EntityBase<CaffTag>
     {
         public CaffTag()
         {
-            CaffToTags= new HashSet<CaffToTag>();
+            CaffToTags = new HashSet<CaffToTag>();
         }
         public string Tag { get; set; }
         public ICollection<CaffToTag> CaffToTags { get; set; }

@@ -1,4 +1,4 @@
-﻿using DataAccessLogic.Entities;
+﻿using ShoppingLikeFiles.DataAccessLogic.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLogic.Repository
+namespace ShoppingLikeFiles.DataAccessLogic.Repository
 {
     public interface IGenericRepository<T> where T : EntityBase<T>, new()
     {

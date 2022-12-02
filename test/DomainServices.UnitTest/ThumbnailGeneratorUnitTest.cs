@@ -5,16 +5,17 @@ namespace DomainServices.UnitTest;
 
 public class ThumbnailGeneratorUnitTest
 {
-
     public class ThumbnailGeneratorSyncTests
     {
         [Fact]
         public void Test1()
         {
-            string expected = "file.jpg";
-            var scenario = new ThumbnailGeneratorScenario(expected);
+            var logger = new LoggerConfiguration().CreateBootstrapLogger().ForContext<ThumbnailGeneratorSyncTests>();
+            string original = "image.caff";
+            string expected = "image.caff.pixel.jpeg";
+            using var scenario = new ThumbnailGeneratorScenario(original, expected, ".", logger);
 
-            scenario.Generator.GenerateThumbnail(GetFile("validfileAsync.caff")).Should().Be(expected);
+            scenario.Generator.GenerateThumbnail(original).Should().Be(expected);
         }
     }
 
@@ -23,26 +24,14 @@ public class ThumbnailGeneratorUnitTest
         [Fact]
         public async Task Test1()
         {
-            string expected = "file.jpg";
-            var scenario = new ThumbnailGeneratorScenario(expected);
+            var logger = new LoggerConfiguration().CreateBootstrapLogger().ForContext<ThumbnailGeneratorSyncTests>();
+            string original = "image1.caff";
+            string expected = "image1.caff.pixel.jpeg";
+            using var scenario = new ThumbnailGeneratorScenario(original, expected, ".", logger);
 
-            Func<Task<string?>> act = () => scenario.Generator.GenerateThumbnailAsync(GetFile("validfile.caff"));
+            Func<Task<string?>> act = () => scenario.Generator.GenerateThumbnailAsync(original);
 
             await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(expected);
         }
-    }
-
-    internal static string GetFile(string testname)
-    {
-        var cwd = Directory.GetCurrentDirectory();
-
-        var files = Directory.EnumerateFiles(cwd, "*.caff");
-
-        if (files.Any(f => f.EndsWith(testname)))
-        {
-            return files.First(f => f.EndsWith(testname));
-        }
-
-        return "";
     }
 }

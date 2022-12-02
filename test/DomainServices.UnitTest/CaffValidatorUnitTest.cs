@@ -1,8 +1,6 @@
-﻿using FluentAssertions.Extensions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using ShoppingLikeFiles.DomainServices.Options;
+﻿using DomainServices.UnitTest.Scenarios;
+using FluentAssertions.Extensions;
+using ShoppingLikeFiles.DomainServices.Model;
 
 namespace DomainServices.UnitTest;
 
@@ -14,7 +12,7 @@ public class CaffValidatorUnitTest
         public void Test_ShouldThrow_ArgumentNull_1()
         {
             ICaffValidator validator;
-            Action action = () => validator = new DefaultCaffValidator("");
+            Action action = () => validator = new DefaultCaffValidator(null, null);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -23,8 +21,9 @@ public class CaffValidatorUnitTest
         public void Test_ShouldThrow_ArgumentNull_2()
         {
             string? arg = null;
+            Mock<INativeCommunicator> communicator = new Mock<INativeCommunicator>();
             ICaffValidator validator;
-            Action action = () => validator = new DefaultCaffValidator(arg);
+            Action action = () => validator = new DefaultCaffValidator(communicator.Object, null);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -32,18 +31,9 @@ public class CaffValidatorUnitTest
         [Fact]
         public void Test_ShouldThrow_ArgumentNull_3()
         {
-            IOptions<CaffValidatorOptions>? options = null;
             ICaffValidator validator;
-            Action act = () => validator = new DefaultCaffValidator(options);
-
-            act.Should().ThrowExactly<ArgumentNullException>();
-        }
-        [Fact]
-        public void Test_ShouldThrow_ArgumentNull_4()
-        {
-            IOptions<CaffValidatorOptions> options = Options.Create(new CaffValidatorOptions() { Validator = null });
-            ICaffValidator validator;
-            Action act = () => validator = new DefaultCaffValidator(options);
+            ILogger logger = new LoggerConfiguration().CreateLogger();
+            Action act = () => validator = new DefaultCaffValidator(null, logger);
 
             act.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -51,9 +41,11 @@ public class CaffValidatorUnitTest
         [Fact]
         public void Test_ShouldNotThrow()
         {
-            IOptions<CaffValidatorOptions> options = Options.Create(new CaffValidatorOptions() { Validator = "Valami" });
+            Mock<INativeCommunicator> communicator = new Mock<INativeCommunicator>();
+            ILogger logger = new LoggerConfiguration().CreateLogger();
             ICaffValidator validator;
-            Action act = () => validator = new DefaultCaffValidator(options);
+
+            Action act = () => validator = new DefaultCaffValidator(communicator.Object, logger);
 
             act.Should().NotThrow<ArgumentNullException>();
         }
@@ -64,9 +56,13 @@ public class CaffValidatorUnitTest
         [Fact]
         public void Test1()
         {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
+            string fileName = "testFile.caff";
+            string expectedReturn = "";
+            ILogger logger = new LoggerConfiguration().CreateLogger().ForContext<CaffValidatorAsyncUnitTest>();
 
-            Action action = () => validator.ValidateFile("");
+            var scenario = new CaffValidationScenario(expectedReturn, fileName, logger);
+
+            Action action = () => scenario.Validator.ValidateFile("");
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -74,54 +70,48 @@ public class CaffValidatorUnitTest
         [Fact]
         public void Test2()
         {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
+            string fileName = "testFile.caff";
+            string expectedReturn = "0\r\n";
+            ILogger logger = new LoggerConfiguration().CreateLogger().ForContext<CaffValidatorAsyncUnitTest>();
 
-            bool result = validator.ValidateFile("notexistingfile.caff");
+            var scenario = new CaffValidationScenario(expectedReturn, fileName, logger);
 
-            result.Should().Be(false, "Nonexistant file should not be valid");
+            var result = scenario.Validator.ValidateFile("notexistingfile.caff");
+
+            result.Should().BeNull();
         }
 
         [Fact]
         public void Test3()
         {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
-            var fileName = GetFile("invalid.caff");
-            bool result = validator.ValidateFile(fileName);
+            string fileName = "testFile.caff";
+            var expectedDate = new DateTime(2020, 7, 2, 14, 50, 0);
+            string expectedReturn = "1\r\n2020:7:2:14:50\r\nTest Creator\r\nlandscape;mountains;sunset;";
+            ILogger logger = new LoggerConfiguration().CreateLogger().ForContext<CaffValidatorAsyncUnitTest>();
+            var scenario = new CaffValidationScenario(expectedReturn, fileName, logger);
 
-            result.Should().Be(false, "Invalid file should not be valid");
-        }
 
-        [Fact]
-        public void Test4()
-        {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
+            var result = scenario.Validator.ValidateFile(fileName);
 
-            var fileName = GetFile("validfile.caff");
-            bool result = validator.ValidateFile(fileName);
-
-            result.Should().Be(true, "A valid file should not be invalid");
-        }
-
-        [Fact]
-        public void Test5()
-        {
-            ICaffValidator validator = new DefaultCaffValidator("nonexistant_validator");
-
-            bool result = validator.ValidateFile("notexistingfile.caff");
-
-            result.Should().Be(false, "Nonexistant file should not be valid");
+            result.Should().NotBeNull();
+            result.As<CaffCredit>().CreationDate.Should().BeCloseTo(expectedDate, TimeSpan.FromMinutes(1));
+            result.As<CaffCredit>().Creator.Should().Be("Test Creator");
+            result.As<CaffCredit>().Tags.Should().OnlyHaveUniqueItems().And.HaveCount(3);
         }
     }
 
     public class CaffValidatorAsyncUnitTest
     {
-
         [Fact]
         public async Task Test1()
         {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
+            string fileName = "testFile.caff";
+            string expectedReturn = "";
+            ILogger logger = new LoggerConfiguration().CreateLogger().ForContext<CaffValidatorAsyncUnitTest>();
 
-            Func<Task> act = () => validator.ValidateFileAsync("");
+            var scenario = new CaffValidationScenario(expectedReturn, fileName, logger);
+
+            Func<Task> act = () => scenario.Validator.ValidateFileAsync("");
 
             await act.Should().ThrowExactlyAsync<ArgumentNullException>();
         }
@@ -129,96 +119,33 @@ public class CaffValidatorUnitTest
         [Fact]
         public async Task Test2()
         {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
+            string fileName = "testFile.caff";
+            string expectedReturn = "0\r\n";
+            ILogger logger = new LoggerConfiguration().CreateLogger().ForContext<CaffValidatorAsyncUnitTest>();
 
-            Func<Task<bool>> act = () => validator.ValidateFileAsync("nonexisting.caff");
+            var scenario = new CaffValidationScenario(expectedReturn, fileName, logger);
 
-            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(false);
+            Func<Task<CaffCredit?>> act = () => scenario.Validator.ValidateFileAsync("nonexisting.caff");
+
+            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(null);
         }
 
         [Fact]
         public async Task Test3()
         {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
+            string fileName = "testFile.caff";
+            var expectedDate = new DateTime(2020, 7, 2, 14, 50, 0);
+            string expectedReturn = "1\r\n2020:7:2:14:50\r\nTest Creator\r\nlandscape;mountains;sunset;";
+            ILogger logger = new LoggerConfiguration().CreateLogger().ForContext<CaffValidatorAsyncUnitTest>();
 
-            Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("invalid.caff"));
+            var scenario = new CaffValidationScenario(expectedReturn, fileName, logger);
 
-            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(false);
-        }
+            var actual = await scenario.Validator.ValidateFileAsync("testFile.caff");
+            actual.Should().NotBeNull();
 
-        [Fact]
-        public async Task Test4()
-        {
-            ICaffValidator validator = new DefaultCaffValidator(validatorPath());
-
-            Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("validfile.caff"));
-
-            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(true);
-        }
-
-        [Fact]
-        public async Task Test5()
-        {
-            ICaffValidator validator = new DefaultCaffValidator("nonexistant_validator");
-
-            bool result = await validator.ValidateFileAsync("notexistingfile.caff");
-
-            result.Should().Be(false, "Nonexistant file should not be valid");
-        }
-    }
-
-    public class DITests
-    {
-        [Fact]
-        public void TestDiSync()
-        {
-            var provider = GetServiceProvider();
-
-            using var scope = provider.CreateScope();
-
-            var validator = scope.ServiceProvider.GetRequiredService<ICaffValidator>();
-
-            validator.ValidateFile(GetFile("validfile.caff")).Should().BeTrue();
-        }
-
-        [Fact]
-        public async Task TestDiAsync()
-        {
-            var provider = GetServiceProvider();
-
-            using var scope = provider.CreateScope();
-
-            var validator = scope.ServiceProvider.GetRequiredService<ICaffValidator>();
-
-            Func<Task<bool>> act = () => validator.ValidateFileAsync(GetFile("validfile.caff"));
-
-            await act.Should().CompleteWithinAsync(5.Minutes()).WithResult(true);
-        }
-
-        private static ServiceProvider GetServiceProvider()
-        {
-            var inMemorySettings = new Dictionary<string, string>
-            {
-                {"key", "value" },
-            };
-
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
-
-            var services = new ServiceCollection();
-
-            services.AddCaffProcessor(x =>
-            {
-                x.Validator = validatorPath();
-                x.GeneratorDir = "";
-            }, f =>
-            {
-                f.ShouldUploadToAzure = false;
-                f.DirectoryPath = "generated";
-            }, configuration);
-
-            return services.BuildServiceProvider();
+            actual.As<CaffCredit>().CreationDate.Should().BeCloseTo(expectedDate, TimeSpan.FromMinutes(1));
+            actual.As<CaffCredit>().Creator.Should().Be("Test Creator");
+            actual.As<CaffCredit>().Tags.Should().OnlyHaveUniqueItems().And.HaveCount(3);
         }
     }
 

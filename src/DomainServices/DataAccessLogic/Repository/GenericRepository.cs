@@ -1,7 +1,7 @@
-﻿using DataAccessLogic.Context;
-using DataAccessLogic.Entities;
-using DataAccessLogic.Extensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoppingLikeFiles.DataAccessLogic.Context;
+using ShoppingLikeFiles.DataAccessLogic.Entities;
+using ShoppingLikeFiles.DataAccessLogic.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLogic.Repository
+namespace ShoppingLikeFiles.DataAccessLogic.Repository
 {
     internal class GenericRepository<T> : IGenericRepository<T> where T : EntityBase<T>, new()
     {

@@ -1,8 +1,10 @@
-﻿namespace ShoppingLikeFiles.DomainServices.Core;
+﻿using ShoppingLikeFiles.DomainServices.Model;
+
+namespace ShoppingLikeFiles.DomainServices.Core;
 
 public interface ICaffValidator
 {
-    bool ValidateFile(string caffFilePath);
-    Task<bool> ValidateFileAsync(string caffFilePath);
+    CaffCredit? ValidateFile(string caffFilePath);
+    Task<CaffCredit?> ValidateFileAsync(string caffFilePath);
 }
 
