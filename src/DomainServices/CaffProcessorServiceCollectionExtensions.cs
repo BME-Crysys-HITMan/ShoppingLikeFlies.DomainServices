@@ -22,31 +22,43 @@ public static class CaffProcessorServiceCollectionExtensions
         services.TryAddEnumerable(
             ServiceDescriptor.Transient<IConfigureOptions<CaffValidatorOptions>, CaffValidatorOptionsSetup>());
 
+        services.Configure<CaffValidatorOptions>(x => x.Validator = "CAFF_processor.exe");
+
         services.TryAddEnumerable(
             ServiceDescriptor.Transient<IConfigureOptions<UploadServiceOptions>, UploadServiceOptionsSetup>());
+
+        services.TryAddEnumerable(
+                ServiceDescriptor.Transient<IConfigureOptions<ThumbnailGeneratorOptions>, ThumbnailGeneratorOptionsSetup>());
 
         services.TryAddSingleton<INativeCommunicator, NativeCommunicator>();
         services.TryAddTransient<ICaffValidator, DefaultCaffValidator>();
         services.TryAddTransient<IThumbnailGenerator, DefaultThumbnailGenerator>();
         services.TryAddScoped<ICaffService, CaffService>();
         services.TryAddTransient<IUploadService, UploadService>();
+        services.TryAddTransient<IDataService, DataService>();
+        services.TryAddTransient<IPaymentService, PaymentService>();
 
         services.AddDataAccessLayer(configuration);
-        services.AddSingleton(_ => MapperConfig.ConfigureAutoMapper());
+        services.AddAutoMapper(typeof(DomainServiesProfile).Assembly);
 
         return services;
     }
 
-    public static IServiceCollection AddCaffProcessor(this IServiceCollection services, Action<CaffValidatorOptions> setupAction, Action<UploadServiceOptions> uploadActions, IConfiguration configuration)
+    public static IServiceCollection AddCaffProcessor(
+        this IServiceCollection services, 
+        Action<CaffValidatorOptions> validatorAction, 
+        Action<UploadServiceOptions> uploadActions, 
+        Action<ThumbnailGeneratorOptions> thumbnailGeneratorActions,
+        IConfiguration configuration)
     {
         if (services == null)
         {
             throw new ArgumentNullException(nameof(services));
         }
 
-        if (setupAction == null)
+        if (validatorAction == null)
         {
-            throw new ArgumentNullException(nameof(setupAction));
+            throw new ArgumentNullException(nameof(validatorAction));
         }
 
         if (uploadActions == null)
@@ -54,9 +66,15 @@ public static class CaffProcessorServiceCollectionExtensions
             throw new ArgumentNullException(nameof(uploadActions));
         }
 
+        if (thumbnailGeneratorActions is null)
+        {
+            throw new ArgumentNullException(nameof(thumbnailGeneratorActions));
+        }
+
         services.AddCaffProcessor(configuration);
-        services.Configure(setupAction);
+        services.Configure(validatorAction);
         services.Configure(uploadActions);
+        services.Configure(thumbnailGeneratorActions);
 
         return services;
     }

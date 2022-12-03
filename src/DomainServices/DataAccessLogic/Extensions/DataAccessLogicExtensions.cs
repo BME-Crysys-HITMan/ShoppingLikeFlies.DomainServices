@@ -11,8 +11,10 @@ namespace ShoppingLikeFiles.DataAccessLogic.Extensions
     {
         public static IServiceCollection AddDataAccessLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            var connStr = configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<ShoppingLikeFliesDbContext>(x =>
-                x.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                x.UseSqlServer(connStr));
             services.AddScoped<IGenericRepository<Caff>, GenericRepository<Caff>>();
             services.AddScoped<IGenericRepository<Comment>, GenericRepository<Comment>>();
             services.AddScoped<IGenericRepository<Caption>, GenericRepository<Caption>>();

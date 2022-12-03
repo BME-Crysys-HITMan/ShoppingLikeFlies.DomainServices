@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
+using Microsoft.Extensions.Options;
 using ShoppingLikeFiles.DomainServices.Options;
 
 namespace ShoppingLikeFiles.DomainServices.Core;
@@ -7,18 +8,20 @@ namespace ShoppingLikeFiles.DomainServices.Core;
 class UploadService : IUploadService
 {
     private readonly UploadServiceOptions options;
-    private readonly BlobServiceClient blobServiceClient;
+    private readonly BlobServiceClient? blobServiceClient;
     private const string blobContainerName = "caff_container";
     //private readonly ILogger logger;
 
-    public UploadService(UploadServiceOptions options, string connectionString) //ILogger<UploadService> logger,
+    public UploadService(IOptions<UploadServiceOptions> options) //ILogger<UploadService> logger,
     {
         //this.logger = logger;
-        this.options = options;
+        this.options = options.Value;
 
         //create containerClient
-        blobServiceClient = new BlobServiceClient(connectionString);
-
+        if (this.options.ShouldUploadToAzure)
+        {
+            blobServiceClient = new BlobServiceClient(this.options.ConnectionString);
+        }
     }
 
     public async Task<string> UploadFileAsync(byte[] filecontent, string fileName)

@@ -15,16 +15,5 @@ internal sealed class CaffValidatorOptionsSetup : IConfigureOptions<CaffValidato
         {
             options.Validator = "CAFF_Processor";
         }
-
-        if (string.IsNullOrEmpty(options.GeneratorDir))
-        {
-            string cwd = Directory.GetCurrentDirectory();
-
-            Directory.CreateDirectory(cwd + "/generated");
-
-            var dirs = Directory.GetDirectories(cwd, "generated");
-
-            options.GeneratorDir = dirs.First();
-        }
     }
 }

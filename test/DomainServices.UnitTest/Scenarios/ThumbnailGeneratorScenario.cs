@@ -27,7 +27,7 @@ internal class ThumbnailGeneratorScenario : IDisposable
         nativeCommunicator.Setup(x => x.CommunicateAsync(It.IsAny<string>())).Returns<Task<string?>>(null);
         nativeCommunicator.Setup(x => x.CommunicateAsync(It.Is<string>(s => s.Contains(originalName) && s.Contains(generatorDir)))).Returns(Task.FromResult<string?>(pixel));
 
-        generator = new DefaultThumbnailGenerator(nativeCommunicator.Object, generatorDir, upload.Object, logger);
+        generator = new DefaultThumbnailGenerator(nativeCommunicator.Object, generatorDir, upload.Object);//, logger);
 
         generatedFile = GeneratePixelFile(generatorDir, pixel);
     }

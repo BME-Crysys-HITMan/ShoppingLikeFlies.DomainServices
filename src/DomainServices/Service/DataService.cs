@@ -7,13 +7,13 @@ public class DataService : IDataService
 {
     private IGenericRepository<Caff> _genericRepository;
     private readonly IMapper _mapper;
-    //private readonly ILogger _logger;
+    //private readonly ILogger //_logger;
 
-    public DataService(IGenericRepository<Caff> genericRepository, IMapper mapper, ILogger logger)
+    public DataService(IGenericRepository<Caff> genericRepository, IMapper mapper)//, ILogger logger)
     {
         _genericRepository = genericRepository;
         _mapper = mapper;
-        //_logger = logger.ForContext<DataService>();
+        ////_logger = logger.ForContext<DataService>();
     }
 
     public async Task<int> CreateCaffAsync(CreateCaffContractDTO contract)
