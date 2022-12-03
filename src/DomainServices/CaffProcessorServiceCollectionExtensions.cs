@@ -30,6 +30,7 @@ public static class CaffProcessorServiceCollectionExtensions
         services.TryAddTransient<IThumbnailGenerator, DefaultThumbnailGenerator>();
         services.TryAddScoped<ICaffService, CaffService>();
         services.TryAddTransient<IUploadService, UploadService>();
+        services.TryAddTransient<IDataService, DataService>();
 
         services.AddDataAccessLayer(configuration);
         services.AddSingleton(_ => MapperConfig.ConfigureAutoMapper());

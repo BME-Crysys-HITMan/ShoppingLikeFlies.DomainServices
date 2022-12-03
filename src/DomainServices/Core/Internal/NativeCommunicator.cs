@@ -10,9 +10,9 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
     internal class NativeCommunicator : INativeCommunicator
     {
         private readonly string _processorPath;
-        private readonly ILogger _logger;
+        //private readonly ILogger ////_logger;
 
-        public NativeCommunicator(IOptions<CaffValidatorOptions> options, ILogger logger)
+        public NativeCommunicator(IOptions<CaffValidatorOptions> options)//, ILogger logger)
         {
             if (options == null)
             {
@@ -25,12 +25,12 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
             }
 
             _processorPath = options.Value.Validator;
-            _logger = logger.ForContext<NativeCommunicator>();
+            //////_logger = logger.ForContext<NativeCommunicator>();
         }
 
         public string? Communicate(string? args)
         {
-            _logger.Verbose("Called {method} with args: {args}", nameof(Communicate), args);
+            ////_logger.Verbose("Called {method} with args: {args}", nameof(Communicate), args);
             try
             {
                 using Process process = new();
@@ -43,7 +43,7 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
 
                 if (!result)
                 {
-                    _logger.Warning("Could not start process");
+                    ////_logger.Warning("Could not start process");
                     return null;
                 }
 
@@ -52,20 +52,20 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
 
                 process.WaitForExit();
 
-                _logger.Verbose("Native call stdout: {stdout}", output);
-                _logger.Verbose("Native call stderr: {stderr}", error);
+                ////_logger.Verbose("Native call stdout: {stdout}", output);
+                ////_logger.Verbose("Native call stderr: {stderr}", error);
 
                 if (error.Trim() != string.Empty)
                 {
-                    _logger.Debug("Native call returned error:\n{error}", error);
+                    ////_logger.Debug("Native call returned error:\n{error}", error);
                 }
 
                 return output;
             }
             catch (Win32Exception ex)
             {
-                _logger.Warning("Failed to validate file.");
-                _logger.Debug(ex, "Exception during file validation, returning null...");
+                ////_logger.Warning("Failed to validate file.");
+                ////_logger.Debug(ex, "Exception during file validation, returning null...");
             }
 
             return null;
@@ -73,7 +73,7 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
 
         public async Task<string?> CommunicateAsync(string? args)
         {
-            _logger.Verbose("Called {method} with args: {args}", nameof(Communicate), args);
+            ////_logger.Verbose("Called {method} with args: {args}", nameof(Communicate), args);
             try
             {
                 string arguments = args is null ? "" : args;
@@ -85,12 +85,12 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
                 .WithStandardErrorPipe(PipeTarget.ToStringBuilder(error))
                 .ExecuteAsync();
 
-                _logger.Verbose("Native call stdout: {stdout}", output.ToString());
-                _logger.Verbose("Native call stderr: {stderr}", error.ToString());
+                ////_logger.Verbose("Native call stdout: {stdout}", output.ToString());
+                ////_logger.Verbose("Native call stderr: {stderr}", error.ToString());
 
                 if (error.ToString().Trim() != "")
                 {
-                    _logger.Debug("Native call returned with error:\n{error}", error.ToString());
+                    ////_logger.Debug("Native call returned with error:\n{error}", error.ToString());
                     return null;
                 }
 
@@ -98,8 +98,8 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal
             }
             catch (Win32Exception ex)
             {
-                _logger.Error("Failed to validate file.");
-                _logger.Debug(ex, "Exception during file validation, returning null...");
+                ////_logger.Error("Failed to validate file.");
+                ////_logger.Debug(ex, "Exception during file validation, returning null...");
             }
 
             return null;

@@ -15,5 +15,10 @@ internal sealed class UploadServiceOptionsSetup : IConfigureOptions<UploadServic
         {
             options.DirectoryPath = ".\\file_directory";
         }
+
+        if (options.ShouldUploadToAzure && string.IsNullOrEmpty(options.ConnectionString))
+        {
+            throw new InvalidDataException("ConnectionString must be set if used with azure");
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal;
 internal class DefaultThumbnailGenerator : IThumbnailGenerator
 {
     private readonly string _generatorDir;
-    //private readonly ILogger _logger;
+    //private readonly ILogger //_logger;
     private readonly IUploadService _uploadService;
     private readonly INativeCommunicator _nativeCommunicator;
 
@@ -23,8 +23,8 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     public DefaultThumbnailGenerator(
         INativeCommunicator communicator,
         IOptions<CaffValidatorOptions> options,
-        IUploadService uploadService,
-        ILogger logger)
+        IUploadService uploadService)//,
+        //ILogger logger)
     {
         if (options is null)
         {
@@ -46,7 +46,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
         _generatorDir = x.GeneratorDir;
         this._nativeCommunicator = communicator ?? throw new ArgumentNullException(nameof(communicator));
         _uploadService = uploadService ?? throw new ArgumentNullException(nameof(uploadService));
-        //_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ////_logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>
@@ -60,20 +60,20 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     internal DefaultThumbnailGenerator(
         INativeCommunicator communicator,
         string generatorDir,
-        IUploadService uploadService,
-        ILogger logger)
+        IUploadService uploadService)//,
+        //ILogger logger)
     {
         this._nativeCommunicator = communicator ?? throw new ArgumentNullException(nameof(communicator));
         _generatorDir = generatorDir ?? throw new ArgumentNullException(nameof(generatorDir));
         _uploadService = uploadService ?? throw new ArgumentNullException(nameof(uploadService));
-        //_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ////_logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
 
     public string? GenerateThumbnail(
         string caffFile)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(GenerateThumbnail), caffFile);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(GenerateThumbnail), caffFile);
         var cleanName = caffFile.Trim();
         if (string.IsNullOrEmpty(cleanName))
         {
@@ -84,7 +84,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         if (string.IsNullOrEmpty(pixelFile))
         {
-            //_logger.Debug("Pixel could not be generated!");
+            ////_logger.Debug("Pixel could not be generated!");
             return null;
         }
 
@@ -95,7 +95,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     public async Task<string?> GenerateThumbnailAsync(
         string caffFile)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(GenerateThumbnailAsync), caffFile);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(GenerateThumbnailAsync), caffFile);
         if (string.IsNullOrEmpty(caffFile))
         {
             throw new ArgumentNullException(nameof(caffFile));
@@ -105,7 +105,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         if (string.IsNullOrEmpty(pixelFile))
         {
-            //_logger.Debug("Pixel could not be generated!");
+            ////_logger.Debug("Pixel could not be generated!");
             return null;
         }
 
@@ -120,7 +120,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     private string? GeneratePixelsFile(
         string caffFile)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(GeneratePixelsFile), caffFile);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(GeneratePixelsFile), caffFile);
         return _nativeCommunicator.Communicate(GetArgs(caffFile));
     }
 
@@ -132,7 +132,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     private Task<string?> GeneratePixelsFileAsync(
         string caffFile)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(GeneratePixelsFileAsync), caffFile);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(GeneratePixelsFileAsync), caffFile);
         return _nativeCommunicator.CommunicateAsync(GetArgs(caffFile));
     }
 
@@ -145,7 +145,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     private async Task<string?> ProcessPixelAsync(
         string pixelFile)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(ProcessPixelAsync), pixelFile);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(ProcessPixelAsync), pixelFile);
         if (string.IsNullOrEmpty(pixelFile))
         {
             throw new ArgumentNullException(nameof(pixelFile));
@@ -167,7 +167,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     private string? ProcessPixel(
         string pixelFile)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(ProcessPixel), pixelFile);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(ProcessPixel), pixelFile);
         if (string.IsNullOrEmpty(pixelFile))
         {
             throw new ArgumentNullException(nameof(pixelFile));
@@ -177,7 +177,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         var fileName = GetFileName(pixelFile);
 
-        //_logger.Debug("Saving file as {fileName}", fileName);
+        ////_logger.Debug("Saving file as {fileName}", fileName);
 
         return _uploadService.UploadFile(data, fileName);
     }
@@ -192,7 +192,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     private byte[] GenerateJpeg(
         string filename)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(GenerateJpeg), filename);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(GenerateJpeg), filename);
         if (string.IsNullOrEmpty(filename))
         {
             throw new ArgumentNullException(nameof(filename));
@@ -205,7 +205,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         if (width == 0 || height == 0)
         {
-            //_logger.Debug("Given image {pixelFile} has invalid dimentions\nwidth:{width}\theight:{height}", filename, width, height);
+            ////_logger.Debug("Given image {pixelFile} has invalid dimentions\nwidth:{width}\theight:{height}", filename, width, height);
 
             throw new InvalidCaffException();
         }
@@ -262,7 +262,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     private string GetArgs(
         string filename)
     {
-        //_logger.Verbose("Method {method} called with args: {fileName}", nameof(GetArgs), filename);
+        ////_logger.Verbose("Method {method} called with args: {fileName}", nameof(GetArgs), filename);
         return $"{filename} --getThumbnail {_generatorDir}";
     }
 
