@@ -1,7 +1,9 @@
 ﻿using Castle.Core.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ShoppingLikeFiles.DomainServices.Options;
 using ShoppingLikeFiles.DomainServices.Service;
 using System;
 using System.Collections.Generic;
@@ -37,9 +39,10 @@ namespace DomainServices.UnitTest
             IServiceCollection services = new ServiceCollection();
 
             var generator = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "generator";
+            var validator = "CAFF_Processor.exe";
 
             services.AddCaffProcessor(
-                x => { x.Validator = "CAFF_Processor.exe"; },
+                x => { x.Validator = validator; },
                 y => { y.ShouldUploadToAzure = false; y.DirectoryPath = generator; },
                 z => { z.GeneratorDir = generator; },
                 cfg);
@@ -50,6 +53,9 @@ namespace DomainServices.UnitTest
             var service = provider.GetRequiredService<ICaffService>();
             var data = provider.GetRequiredService<IDataService>();
             var payment = provider.GetRequiredService<IPaymentService>();
+            var options = provider.GetRequiredService<IOptions<CaffValidatorOptions>>();
+
+            options.Value.Validator.Should().Be(validator);
         }
 
         private IConfiguration getConfig()

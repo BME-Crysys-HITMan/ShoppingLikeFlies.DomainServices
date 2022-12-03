@@ -36,6 +36,7 @@ public static class CaffProcessorServiceCollectionExtensions
         services.TryAddScoped<ICaffService, CaffService>();
         services.TryAddTransient<IUploadService, UploadService>();
         services.TryAddTransient<IDataService, DataService>();
+        services.TryAddTransient<IPaymentService, PaymentService>();
 
         services.AddDataAccessLayer(configuration);
         services.AddAutoMapper(typeof(DomainServiesProfile).Assembly);
