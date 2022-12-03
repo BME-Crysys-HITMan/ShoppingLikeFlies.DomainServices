@@ -18,5 +18,6 @@ public interface ICaffService
     string? GetThumbnail(string caffFilePath);
 
     Task<CaffCredit?> ValidateFileAsync(string caffFilePath);
+
     Task<string?> GetThumbnailAsync(string caffFilePath);
 }

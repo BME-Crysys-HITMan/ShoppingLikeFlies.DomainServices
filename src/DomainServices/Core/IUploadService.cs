@@ -3,7 +3,7 @@
 /// <summary>
 /// This interface represents a class that is able to upload a .caff file to a persistent storage solution.
 /// </summary>
-internal interface IUploadService
+public interface IUploadService
 {
 
     /// <summary>
