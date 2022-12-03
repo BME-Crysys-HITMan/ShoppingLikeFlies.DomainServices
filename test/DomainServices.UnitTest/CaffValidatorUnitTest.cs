@@ -12,7 +12,7 @@ public class CaffValidatorUnitTest
         public void Test_ShouldThrow_ArgumentNull_1()
         {
             ICaffValidator validator;
-            Action action = () => validator = new DefaultCaffValidator(null, null);
+            Action action = () => validator = new DefaultCaffValidator(null);//, null);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -23,7 +23,7 @@ public class CaffValidatorUnitTest
             string? arg = null;
             Mock<INativeCommunicator> communicator = new Mock<INativeCommunicator>();
             ICaffValidator validator;
-            Action action = () => validator = new DefaultCaffValidator(communicator.Object, null);
+            Action action = () => validator = new DefaultCaffValidator(communicator.Object);//, null);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -33,7 +33,7 @@ public class CaffValidatorUnitTest
         {
             ICaffValidator validator;
             ILogger logger = new LoggerConfiguration().CreateLogger();
-            Action act = () => validator = new DefaultCaffValidator(null, logger);
+            Action act = () => validator = new DefaultCaffValidator(null);//, logger);
 
             act.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -45,7 +45,7 @@ public class CaffValidatorUnitTest
             ILogger logger = new LoggerConfiguration().CreateLogger();
             ICaffValidator validator;
 
-            Action act = () => validator = new DefaultCaffValidator(communicator.Object, logger);
+            Action act = () => validator = new DefaultCaffValidator(communicator.Object);//, logger);
 
             act.Should().NotThrow<ArgumentNullException>();
         }

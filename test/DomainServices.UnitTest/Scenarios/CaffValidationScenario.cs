@@ -15,7 +15,7 @@ internal class CaffValidationScenario
         mockCommunicator.Setup(x => x.Communicate(It.Is<string>(s => !s.Contains(fileName)))).Returns(string.Empty);
         mockCommunicator.Setup(x => x.CommunicateAsync(It.Is<string>(s => !s.Contains(fileName)))).Returns(Task.FromResult<string?>(null));
 
-        validator = new DefaultCaffValidator(mockCommunicator.Object, logger);
+        validator = new DefaultCaffValidator(mockCommunicator.Object);//, logger);
     }
 
     public ICaffValidator Validator => validator;
