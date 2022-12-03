@@ -6,18 +6,18 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal;
 internal class DefaultCaffValidator : ICaffValidator
 {
     private readonly INativeCommunicator _communicator;
-    //private readonly ILogger //_logger;
+    private readonly ILogger _logger;
     private const string validateArgument = "--validate";
 
 
-    public DefaultCaffValidator(INativeCommunicator communicator)//, ILogger<DefaultCaffValidator> logger)
+    public DefaultCaffValidator(INativeCommunicator communicator, ILogger logger)
     {
-        //if (logger is null)
-        //{
-        //    throw new ArgumentNullException(nameof(logger));
-        //}
+        if (logger is null)
+        {
+            throw new ArgumentNullException(nameof(logger));
+        }
 
-        ////_logger = logger.ForContext<DefaultCaffValidator>();
+        _logger = logger.ForContext<DefaultCaffValidator>();
         _communicator = communicator ?? throw new ArgumentNullException(nameof(communicator));
     }
 
