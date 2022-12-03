@@ -36,9 +36,12 @@ namespace DomainServices.UnitTest
             IConfiguration cfg = getConfig();
             IServiceCollection services = new ServiceCollection();
 
+            var generator = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "generator";
+
             services.AddCaffProcessor(
-                x => { x.GeneratorDir = "."; x.Validator = "CAFF_Processor.exe"; },
-                y => { y.ShouldUploadToAzure = false; y.DirectoryPath = "generator"; },
+                x => { x.Validator = "CAFF_Processor.exe"; },
+                y => { y.ShouldUploadToAzure = false; y.DirectoryPath = generator; },
+                z => { z.GeneratorDir = generator; },
                 cfg);
 
             var provider = services.BuildServiceProvider();

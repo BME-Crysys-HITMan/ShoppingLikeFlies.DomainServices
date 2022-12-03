@@ -22,7 +22,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
     /// <exception cref="ArgumentNullException"></exception>
     public DefaultThumbnailGenerator(
         INativeCommunicator communicator,
-        IOptions<CaffValidatorOptions> options,
+        IOptions<ThumbnailGeneratorOptions> options,
         IUploadService uploadService)//,
         //ILogger logger)
     {
@@ -38,7 +38,7 @@ internal class DefaultThumbnailGenerator : IThumbnailGenerator
 
         var x = options.Value;
 
-        if (string.IsNullOrEmpty(x.Validator) || string.IsNullOrEmpty(x.GeneratorDir))
+        if (string.IsNullOrEmpty(x.GeneratorDir))
         {
             throw new ArgumentNullException(nameof(options));
         }
