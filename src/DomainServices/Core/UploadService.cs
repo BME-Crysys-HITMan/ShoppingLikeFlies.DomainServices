@@ -9,11 +9,11 @@ class UploadService : IUploadService
     private readonly UploadServiceOptions options;
     private readonly BlobServiceClient blobServiceClient;
     private const string blobContainerName = "caff_container";
-    private readonly Serilog.ILogger logger;
+    //private readonly ILogger logger;
 
-    public UploadService(Serilog.ILogger logger, UploadServiceOptions options, string connectionString)
+    public UploadService(UploadServiceOptions options, string connectionString) //ILogger<UploadService> logger,
     {
-        this.logger = logger;
+        //this.logger = logger;
         this.options = options;
 
         //create containerClient
@@ -23,7 +23,7 @@ class UploadService : IUploadService
 
     public async Task<string> UploadFileAsync(byte[] filecontent, string fileName)
     {
-        logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFileAsync), fileName);
+        //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFileAsync), fileName);
         try
         {
             string location = $"{options.DirectoryPath}/{fileName}";
@@ -60,15 +60,15 @@ class UploadService : IUploadService
         }
         catch (IOException e)
         {
-            logger.Error("Error occured during file save");
-            logger.Debug(e, "Error occured during file save with filename: {fileName}", fileName);
+            //logger.Error("Error occured during file save");
+            //logger.Debug(e, "Error occured during file save with filename: {fileName}", fileName);
             return String.Empty;
         }
     }
 
     public async Task<bool> RemoveFileAsync(string fileLocation)
     {
-        logger.Verbose("Called {method}, with arguments: {fileName}", nameof(RemoveFileAsync), fileLocation);
+        //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(RemoveFileAsync), fileLocation);
         await Task.Yield();
         try
         {
@@ -77,11 +77,11 @@ class UploadService : IUploadService
                 if (File.Exists(fileLocation))
                 {
                     File.Delete(fileLocation);
-                    logger.Information("File deleted");
+                    //logger.Information("File deleted");
                 }
                 else
                 {
-                    logger.Information("File not found");
+                    //logger.Information("File not found");
                     return false;
                 }
             }
@@ -95,8 +95,8 @@ class UploadService : IUploadService
         }
         catch (IOException e)
         {
-            logger.Error("Error occured during file deletion");
-            logger.Debug(e, "Error occured during file deletion with filename: {fileName}", fileLocation);
+            //logger.Error("Error occured during file deletion");
+            //logger.Debug(e, "Error occured during file deletion with filename: {fileName}", fileLocation);
             return false;
         }
 
@@ -104,7 +104,7 @@ class UploadService : IUploadService
 
     public string UploadFile(byte[] filecontent, string fileName)
     {
-        logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFile), fileName);
+        //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFile), fileName);
         try
         {
             string location = $"{options.DirectoryPath}/{fileName}";
@@ -141,8 +141,8 @@ class UploadService : IUploadService
         }
         catch (IOException e)
         {
-            logger.Error("Error occured during file save");
-            logger.Debug(e, "Error occured during file save with filename: {fileName}", fileName);
+            //logger.Error("Error occured during file save");
+            //logger.Debug(e, "Error occured during file save with filename: {fileName}", fileName);
             return string.Empty;
         }
     }

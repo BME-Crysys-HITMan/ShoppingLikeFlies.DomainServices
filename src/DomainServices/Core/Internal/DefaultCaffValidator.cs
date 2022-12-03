@@ -6,24 +6,24 @@ namespace ShoppingLikeFiles.DomainServices.Core.Internal;
 internal class DefaultCaffValidator : ICaffValidator
 {
     private readonly INativeCommunicator _communicator;
-    private readonly ILogger _logger;
+    //private readonly ILogger _logger;
     private const string validateArgument = "--validate";
 
 
-    public DefaultCaffValidator(INativeCommunicator communicator, ILogger logger)
+    public DefaultCaffValidator(INativeCommunicator communicator)//, ILogger<DefaultCaffValidator> logger)
     {
-        if (logger is null)
-        {
-            throw new ArgumentNullException(nameof(logger));
-        }
+        //if (logger is null)
+        //{
+        //    throw new ArgumentNullException(nameof(logger));
+        //}
 
-        _logger = logger.ForContext<DefaultCaffValidator>();
+        //_logger = logger.ForContext<DefaultCaffValidator>();
         _communicator = communicator ?? throw new ArgumentNullException(nameof(communicator));
     }
 
     public CaffCredit? ValidateFile(string fileName)
     {
-        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFile), fileName);
+        //_logger.Verbose("Called {method} with {fileName}", nameof(ValidateFile), fileName);
         string cleanFileName = fileName.Trim();
         if (string.IsNullOrEmpty(cleanFileName))
         {
@@ -44,7 +44,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     public Task<CaffCredit?> ValidateFileAsync(string fileName)
     {
-        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileAsync), fileName);
+        //_logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileAsync), fileName);
         string cleanFileName = fileName.Trim();
         if (string.IsNullOrEmpty(cleanFileName))
         {
@@ -59,7 +59,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     private async Task<CaffCredit?> ValidateFileInternalAsync(string filename)
     {
-        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileInternalAsync), filename);
+        //_logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileInternalAsync), filename);
 
         var response = await _communicator.CommunicateAsync(GetArguments(filename));
 
