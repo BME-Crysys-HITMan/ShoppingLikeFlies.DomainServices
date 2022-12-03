@@ -5,7 +5,6 @@
 /// </summary>
 public interface IUploadService
 {
-
     /// <summary>
     /// Saves a file to a persistent storage solution.
     /// </summary>

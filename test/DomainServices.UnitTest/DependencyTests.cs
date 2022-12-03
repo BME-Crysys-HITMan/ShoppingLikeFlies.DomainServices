@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Serilog.Core;
 using ShoppingLikeFiles.DomainServices.Options;
 using ShoppingLikeFiles.DomainServices.Service;
 using System;
@@ -21,6 +22,9 @@ namespace DomainServices.UnitTest
         {
             IConfiguration cfg = getConfig();
             IServiceCollection services = new ServiceCollection();
+            var logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+
+            services.AddTransient<ILogger, Logger>((x) => logger);
 
             services.AddCaffProcessor(cfg);
 
@@ -40,6 +44,10 @@ namespace DomainServices.UnitTest
 
             var generator = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "generator";
             var validator = "CAFF_Processor.exe";
+
+            var logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+
+            services.AddTransient<ILogger, Logger>((x) => logger);
 
             services.AddCaffProcessor(
                 x => { x.Validator = validator; },
