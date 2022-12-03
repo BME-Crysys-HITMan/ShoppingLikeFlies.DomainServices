@@ -1,21 +1,23 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
+using Microsoft.Extensions.Options;
 using ShoppingLikeFiles.DomainServices.Options;
 
 namespace ShoppingLikeFiles.DomainServices.Core;
 
 class UploadService : IUploadService
 {
-    private readonly UploadServiceOptions options;
+    private readonly bool ShouldUploadToAzure;
+    private readonly string DirectoryPath;
     private readonly BlobServiceClient blobServiceClient;
     private const string blobContainerName = "caff_container";
     //private readonly ILogger logger;
 
-    public UploadService(UploadServiceOptions options, string connectionString) //ILogger<UploadService> logger,
+    public UploadService(IOptions<UploadServiceOptions> options, string connectionString) //ILogger<UploadService> logger,
     {
         //this.logger = logger;
-        this.options = options;
-
+        this.ShouldUploadToAzure = options.Value.ShouldUploadToAzure;
+        this.DirectoryPath= options.Value.DirectoryPath;
         //create containerClient
         blobServiceClient = new BlobServiceClient(connectionString);
 
@@ -26,8 +28,8 @@ class UploadService : IUploadService
         //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFileAsync), fileName);
         try
         {
-            string location = $"{options.DirectoryPath}/{fileName}";
-            if (!this.options.ShouldUploadToAzure)
+            string location = $"{this.DirectoryPath}/{fileName}";
+            if (!this.ShouldUploadToAzure)
             {
                 using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
                 {
@@ -72,7 +74,7 @@ class UploadService : IUploadService
         await Task.Yield();
         try
         {
-            if (!this.options.ShouldUploadToAzure)
+            if (!this.ShouldUploadToAzure)
             {
                 if (File.Exists(fileLocation))
                 {
@@ -107,8 +109,8 @@ class UploadService : IUploadService
         //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFile), fileName);
         try
         {
-            string location = $"{options.DirectoryPath}/{fileName}";
-            if (!this.options.ShouldUploadToAzure)
+            string location = $"{this.DirectoryPath}/{fileName}";
+            if (!this.ShouldUploadToAzure)
             {
                 using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
                 {
