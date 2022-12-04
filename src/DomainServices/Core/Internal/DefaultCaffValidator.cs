@@ -23,7 +23,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     public CaffCredit? ValidateFile(string fileName)
     {
-        ////_logger.Verbose("Called {method} with {fileName}", nameof(ValidateFile), fileName);
+        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFile), fileName);
         string cleanFileName = fileName.Trim();
         if (string.IsNullOrEmpty(cleanFileName))
         {
@@ -44,7 +44,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     public Task<CaffCredit?> ValidateFileAsync(string fileName)
     {
-        ////_logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileAsync), fileName);
+        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileAsync), fileName);
         string cleanFileName = fileName.Trim();
         if (string.IsNullOrEmpty(cleanFileName))
         {
@@ -59,7 +59,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     private async Task<CaffCredit?> ValidateFileInternalAsync(string filename)
     {
-        ////_logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileInternalAsync), filename);
+        _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileInternalAsync), filename);
 
         var response = await _communicator.CommunicateAsync(GetArguments(filename));
 
@@ -76,6 +76,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     private CaffCredit GetCredit(string response)
     {
+        _logger.Verbose("Method {method} called with args: {}", nameof(GetCredit), response);
         var lines = response.Split("\r\n");
 
         string[] date = lines[1].Split(":");
