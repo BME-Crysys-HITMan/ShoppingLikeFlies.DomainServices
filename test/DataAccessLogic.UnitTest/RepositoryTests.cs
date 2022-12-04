@@ -65,7 +65,14 @@ namespace DataAccessLogic.UnitTest
         {
             var r = new Random();
             var time = DateTime.UtcNow;
-            var ct = new DateTime(r.Next(1980, 2022), r.Next(1, 13), r.Next(1, 32), r.Next(25), r.Next(61), 0, DateTimeKind.Utc);
+            var ct = new DateTime(
+                r.Next(1980, 2022),
+                r.Next(1, 12),
+                r.Next(1, 30),
+                r.Next(24),
+                r.Next(60),
+                0,
+                DateTimeKind.Utc);
             var caff = new Caff()
             {
                 Caption = Guid.NewGuid().ToString(),

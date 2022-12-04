@@ -96,7 +96,7 @@ public class CaffValidatorUnitTest
 
             result.Should().NotBeNull();
             result.As<CaffCredit>().CreationDate.Should().BeCloseTo(expectedDate, TimeSpan.FromMinutes(1));
-            result.As<CaffCredit>().Creator.Should().Be("Test Creator");
+            result.As<CaffCredit>().Creator.Trim().Should().Be("Test Creator");
             result.As<CaffCredit>().Tags.Should().OnlyHaveUniqueItems().And.HaveCount(3);
         }
     }
@@ -145,7 +145,7 @@ public class CaffValidatorUnitTest
             actual.Should().NotBeNull();
 
             actual.As<CaffCredit>().CreationDate.Should().BeCloseTo(expectedDate, TimeSpan.FromMinutes(1));
-            actual.As<CaffCredit>().Creator.Should().Be("Test Creator");
+            actual.As<CaffCredit>().Creator.Trim().Should().Be("Test Creator");
             actual.As<CaffCredit>().Tags.Should().OnlyHaveUniqueItems().And.HaveCount(3);
         }
     }
