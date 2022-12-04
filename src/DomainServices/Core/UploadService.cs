@@ -29,19 +29,23 @@ class UploadService : IUploadService
         //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFileAsync), fileName);
         try
         {
-            string location = $"{options.DirectoryPath}/{fileName}";
+            string location = $"{options.DirectoryPath}{Path.DirectorySeparatorChar}{fileName}";
             if (!this.options.ShouldUploadToAzure)
             {
-                using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                if (File.Exists(location))
                 {
-                    if (File.Exists(location))
+                    throw new ArgumentException("File name already exists!");
+                }
+                using (var stream = new FileStream(location, FileMode.CreateNew, FileAccess.Write))
+                {
+                    if (!File.Exists(location))
                     {
-                        throw new ArgumentException("File name already exists!");
+                        throw new ArgumentException("File could not be created!");
                     }
 
                     stream.Write(filecontent, 0, filecontent.Length);
                 }
-                return fileName;
+                return location;
             }
             else
             {
@@ -102,7 +106,6 @@ class UploadService : IUploadService
             //logger.Debug(e, "Error occured during file deletion with filename: {fileName}", fileLocation);
             return false;
         }
-
     }
 
     public string UploadFile(byte[] filecontent, string fileName)
@@ -110,19 +113,23 @@ class UploadService : IUploadService
         //logger.Verbose("Called {method}, with arguments: {fileName}", nameof(UploadFile), fileName);
         try
         {
-            string location = $"{options.DirectoryPath}/{fileName}";
+            string location = $"{options.DirectoryPath}{Path.DirectorySeparatorChar}{fileName}";
             if (!this.options.ShouldUploadToAzure)
             {
-                using (var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                if (File.Exists(location))
                 {
-                    if (File.Exists(location))
+                    throw new ArgumentException("File name already exists!");
+                }
+                using (var stream = new FileStream(location, FileMode.CreateNew, FileAccess.Write))
+                {
+                    if (!File.Exists(location))
                     {
-                        throw new ArgumentException("File name already exists!");
+                        throw new ArgumentException("File could not be created!");
                     }
 
                     stream.Write(filecontent, 0, filecontent.Length);
                 }
-                return fileName;
+                return location;
             }
             else
             {

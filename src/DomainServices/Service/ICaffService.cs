@@ -20,4 +20,18 @@ public interface ICaffService
     Task<CaffCredit?> ValidateFileAsync(string caffFilePath);
 
     Task<string?> GetThumbnailAsync(string caffFilePath);
+
+    /// <summary>
+    /// Validates, generates thumbnail and uploads the file all-in-one
+    /// </summary>
+    /// <param name="caffFilePath">path/to/file</param>
+    /// <returns>returns the created <see cref="Caff"/> entry's id. If null, one of the steps failed</returns>
+    Task<int?> UploadFileAsync(string caffFilePath);
+
+    /// <summary>
+    /// Validates, generates thumbnail and uploads the file all-in-one
+    /// </summary>
+    /// <param name="caffFilePath">path/to/file</param>
+    /// <returns>returns the created <see cref="Caff"/> entry's id. If null, one of the steps failed</returns>
+    int? UploadFile(string caffFilePath);
 }

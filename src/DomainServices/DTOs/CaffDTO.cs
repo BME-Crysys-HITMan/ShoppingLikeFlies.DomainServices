@@ -10,8 +10,8 @@ public class CaffDTO
     public byte Hour { get; set; }
     public byte Minute { get; set; }
     public string Creator { get; set; } = string.Empty;
-    public List<CaffTagDTO> Tags { get; set; } = new();
+    public List<string> Tags { get; set; } = new();
     public string ThumbnailPath { get; set; } = string.Empty;
     public List<CommentDTO> Comments { get; set; } = new();
-    public List<CaptionDTO> Captions { get; set; } = new();
+    public string Caption { get; set; } = string.Empty;
 }

@@ -1,27 +1,46 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace ShoppingLikeFiles.DataAccessLogic.Entities
+﻿namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
-    public class Caff : EntityBase<Caff>
+    /// <summary>
+    /// Class <c>Caff</c> entity to store CAFF information 
+    /// (<seealso href="https://www.crysys.hu/downloads/vihima06/2020/CAFF.txt" />)
+    /// </summary>
+    public class Caff : EntityBase
     {
-        public Caff()
-        {
-            Tags = new HashSet<CaffToTag>();
-            Comments = new HashSet<Comment>();
-        }
-        public string FilePath { get; set; } = string.Empty;
-        public DateTime CreationDateTime { get; set; }
+        /// <summary>
+        /// Creator name of the file.
+        /// </summary>
         public string Creator { get; set; } = string.Empty;
-        public ICollection<CaffToTag> Tags { get; set; }
-        public string ThumbnailPath { get; set; } = string.Empty;
-        public ICollection<Caption> Captions { get; set; }
-        public ICollection<Comment> Comments { get; set; }
 
-        public override void IncludeAll(IQueryable<Caff> queryable)
-        {
-            queryable.Include(x => x.Tags).ThenInclude(x => x.CaffTag);
-            queryable.Include(x => x.Comments);
-            queryable.Include(x => x.Captions);
-        }
+        /// <summary>
+        /// File download url.
+        /// </summary>
+        public string FilePath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Date the <c>CAFF</c> file was created.
+        /// </summary>
+        public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
+
+
+
+        /// <summary>
+        /// Tags in the file. Each separated by <c>';'</c>.
+        /// </summary>
+        public string Tags { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Download path to the generated thumbnail image.
+        /// </summary>
+        public string ThumbnailPath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Caption of the file.
+        /// </summary>
+        public string Caption { get; set; } = string.Empty;
+
+        /// <summary>
+        /// <see cref="Comment"/>s for a single caff image 
+        /// </summary>
+        public List<Comment> Comments { get; set; } = new();
     }
 }
