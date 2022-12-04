@@ -32,10 +32,15 @@ internal class DefaultCaffValidator : ICaffValidator
         var arguments = GetArguments(cleanFileName);
 
         var response = _communicator.Communicate(arguments);
-
+        _logger.Verbose("Native returned with {response}", response);
         if (!string.IsNullOrEmpty(response))
         {
-            if (response.StartsWith("0")) return null;
+
+            if (response.StartsWith("0"))
+            {
+                _logger.Debug("Got an invalid file here.");
+                return null;
+            }
             return GetCredit(response);
         }
 
@@ -62,10 +67,14 @@ internal class DefaultCaffValidator : ICaffValidator
         _logger.Verbose("Called {method} with {fileName}", nameof(ValidateFileInternalAsync), filename);
 
         var response = await _communicator.CommunicateAsync(GetArguments(filename));
-
+        _logger.Verbose("Native returned with {response}", response);
         if (!string.IsNullOrEmpty(response))
         {
-            if (response.StartsWith("0")) return null;
+            if (response.StartsWith("0"))
+            {
+                _logger.Debug("Got an invalid file here.");
+                return null;
+            }
             return GetCredit(response);
         }
 
