@@ -1,5 +1,6 @@
 ﻿using ShoppingLikeFiles.DomainServices.Exceptions;
 using ShoppingLikeFiles.DomainServices.Model;
+using System.Runtime.InteropServices;
 
 namespace ShoppingLikeFiles.DomainServices.Core.Internal;
 
@@ -95,8 +96,12 @@ internal class DefaultCaffValidator : ICaffValidator
             throw new ArgumentNullException($"{nameof(response)}");
         }
 
-        var lines = response.Split("\r\n");
-
+        var lines = response.Split(LineEnding);
+        var linesW = response.Split("\r\n");
+        var linesL = response.Split('\n');
+        _logger.Verbose("Splitted response: {@lines}", lines);
+        _logger.Verbose("Splitted windows response: {@lines}", linesW);
+        _logger.Verbose("Splitted linux response: {@lines}", linesL);
         string[] date = lines[1].Split(":");
 
         if (date.Length != 5)
@@ -117,6 +122,19 @@ internal class DefaultCaffValidator : ICaffValidator
         credit.Tags = tags;
 
         return credit;
+    }
+
+    private static string LineEnding
+    {
+        get
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return "\r\n";
+            }
+
+            return "\n";
+        }
     }
 }
 
