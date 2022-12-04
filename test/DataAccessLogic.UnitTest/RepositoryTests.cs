@@ -2,11 +2,6 @@
 using ShoppingLikeFiles.DataAccessLogic.Context;
 using ShoppingLikeFiles.DataAccessLogic.Entities;
 using ShoppingLikeFiles.DataAccessLogic.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLogic.UnitTest
 {
@@ -25,6 +20,26 @@ namespace DataAccessLogic.UnitTest
             Assert.Equal(expected.Tags, actual.Tags);
         }
 
+        [Fact]
+        public async Task test2()
+        {
+            var repo = GetRepo();
+
+            var expected = GetRandomCaff();
+            var id = await repo.AddAsync(expected);
+
+            var comment = new Comment { Text = "test", UserId = Guid.NewGuid() };
+
+            await repo.AddCommentAsync(id, comment);
+
+            var actual = await repo.GetAsync(id);
+
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual.Comments);
+            Assert.Single(actual.Comments);
+        }
+
+
         private IGenericRepository<Caff> GetContext()
         {
             var dbName = Guid.NewGuid().ToString();
@@ -32,8 +47,18 @@ namespace DataAccessLogic.UnitTest
                 .UseInMemoryDatabase(dbName)
                 .Options;
 
-
             return new GenericRepository<Caff>(new ShoppingLikeFliesDbContext(options));
+        }
+
+        private CaffRepository GetRepo()
+        {
+            var dbName = Guid.NewGuid().ToString();
+            var options = new DbContextOptionsBuilder<ShoppingLikeFliesDbContext>()
+                .UseInMemoryDatabase(dbName)
+                .Options;
+
+
+            return new CaffRepository(new ShoppingLikeFliesDbContext(options));
         }
 
         private Caff GetRandomCaff()

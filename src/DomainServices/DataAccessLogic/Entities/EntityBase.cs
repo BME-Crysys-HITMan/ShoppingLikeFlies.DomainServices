@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ShoppingLikeFiles.DataAccessLogic.Entities;
 
-namespace ShoppingLikeFiles.DataAccessLogic.Entities
+/// <summary>
+/// A common base class for any entity stored in the DB.
+/// </summary>
+public class EntityBase
 {
-    public class EntityBase
-    {
-        public int Id { get; set; }
+    /// <summary>
+    /// Id of an entity.
+    /// </summary>
+    public int Id { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
-        public DateTime Updated { get; set; } = DateTime.UtcNow;
-    }
+    /// <summary>
+    /// The date that the entity is created at.
+    /// </summary>
+    public DateTime Created { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// The date, the entity was last updates.
+    /// </summary>
+    public DateTime Updated { get; set; } = DateTime.UtcNow;
 }

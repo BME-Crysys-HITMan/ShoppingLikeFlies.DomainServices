@@ -1,17 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ShoppingLikeFiles.DataAccessLogic.Entities;
 
-namespace ShoppingLikeFiles.DataAccessLogic.Entities
+/// <summary>
+/// Comment entity used for storing comments.
+/// </summary>
+public class Comment : EntityBase
 {
-    public class Comment : EntityBase
-    {
-        public string Text { get; set; } = string.Empty;
-        public int CaffId { get; set; }
-        public Caff? Caff { get; set; }
-        public Guid UserId { get; set; }
-    }
+    /// <summary>
+    /// Content of the comment.
+    /// </summary>
+    public string Text { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Foreign key for <see cref="Caff"/> entity.
+    /// </summary>
+    public int CaffId { get; set; }
+
+    /// <summary>
+    /// Navigation property for <see cref="Caff"/> entity.
+    /// </summary>
+    public Caff? Caff { get; set; }
+
+    /// <summary>
+    /// User who made the comment.
+    /// </summary>
+    public Guid UserId { get; set; }
 }

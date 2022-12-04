@@ -33,8 +33,4 @@
 		<InternalsVisibleTo Include="DataAccessLogic.UnitTest" />
 		<InternalsVisibleTo Include="DataAccessLogic.IntegrationTest" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Configurations\" />
-	</ItemGroup>
 </Project>
