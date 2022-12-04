@@ -7,6 +7,11 @@
     public class Caff : EntityBase
     {
         /// <summary>
+        /// Creator name of the file.
+        /// </summary>
+        public string Creator { get; set; } = string.Empty;
+
+        /// <summary>
         /// File download url.
         /// </summary>
         public string FilePath { get; set; } = string.Empty;
@@ -16,13 +21,10 @@
         /// </summary>
         public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
 
-        /// <summary>
-        /// Creator name of the file.
-        /// </summary>
-        public string Creator { get; set; } = string.Empty;
+
 
         /// <summary>
-        /// Tags in the file.
+        /// Tags in the file. Each separated by <c>';'</c>.
         /// </summary>
         public string Tags { get; set; } = string.Empty;
 

@@ -33,13 +33,13 @@ internal class GenericRepository<T> : IGenericRepository<T>, IDisposable where T
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        var entities = await _entitiySet.ToListAsync();
+        var entities = await _entitiySet.AsNoTracking().ToListAsync();
 
         return entities;
     }
 
     public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression)
-        => await _entitiySet.Where(expression).ToListAsync();
+        => await _entitiySet.Where(expression).AsNoTracking().ToListAsync();
 
     public Task<T?> GetAsync(Expression<Func<T, bool>> expression)
         => _entitiySet.FirstOrDefaultAsync(expression);

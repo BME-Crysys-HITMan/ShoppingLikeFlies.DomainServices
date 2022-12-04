@@ -32,5 +32,6 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="DataAccessLogic.UnitTest" />
 		<InternalsVisibleTo Include="DataAccessLogic.IntegrationTest" />
+		<InternalsVisibleTo Include="DomainServices.IntegrationTest" />
 	</ItemGroup>
 </Project>
