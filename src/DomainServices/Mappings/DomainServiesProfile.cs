@@ -20,7 +20,7 @@ internal class DomainServiesProfile : Profile
                 .ForMember(dest => dest.Id, m => m.Ignore())
                 .ForMember(dest => dest.Comments, m => m.Ignore()).ReverseMap();
 
-        CreateMap<CaffTag, CaffTagDTO>()
+        /*CreateMap<CaffTag, CaffTagDTO>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, m => m.Ignore())
                 .ForMember(dest => dest.CaffToTags, m => m.Ignore()).ReverseMap();
@@ -29,9 +29,9 @@ internal class DomainServiesProfile : Profile
                 .ForMember(dest => dest.CaffTag, m => m.MapFrom(src => src))
                 .ForMember(dest => dest.CaffTagId, m => m.Ignore())
                 .ForMember(dest => dest.CaffId, m => m.Ignore())
-                .ForMember(dest => dest.Caff, m => m.Ignore()).ReverseMap();
+                .ForMember(dest => dest.Caff, m => m.Ignore()).ReverseMap();*/
 
-        CreateMap<CaffToTag, CaffDTO>()
+        /*CreateMap<CaffToTag, CaffDTO>()
                .ForMember(dest => dest.Id, m => m.MapFrom(src => src.Caff.Id))
                .ForMember(dest => dest.FilePath, m => m.MapFrom(src => src.Caff.FilePath))
                .ForMember(dest => dest.Creator, m => m.MapFrom(src => src.Caff.Creator))
@@ -50,6 +50,6 @@ internal class DomainServiesProfile : Profile
                 .ForMember(dest => dest.Tag, m => m.MapFrom(src => src.CaffTag.Id)).ReverseMap();
 
         CreateMap<Caption, CaptionDTO>()
-                .ReverseMap();
+                .ReverseMap();*/
     }
 }

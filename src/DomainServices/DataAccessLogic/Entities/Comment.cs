@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
-    public class Comment : EntityBase<Comment>
+    public class Comment : EntityBase
     {
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
         public int CaffId { get; set; }
-        public virtual Caff Caff { get; set; }
-        public int UserId { get; set; }
-        public override void IncludeAll(IQueryable<Comment> queryable)
-        {
-            queryable.Include(x => x.Caff);
-        }
+        public Caff? Caff { get; set; }
+        public Guid UserId { get; set; }
     }
 }

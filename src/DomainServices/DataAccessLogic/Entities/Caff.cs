@@ -2,26 +2,14 @@
 
 namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
-    public class Caff : EntityBase<Caff>
+    public class Caff : EntityBase
     {
-        public Caff()
-        {
-            Tags = new HashSet<CaffToTag>();
-            Comments = new HashSet<Comment>();
-        }
         public string FilePath { get; set; } = string.Empty;
-        public DateTime CreationDateTime { get; set; }
+        public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
         public string Creator { get; set; } = string.Empty;
-        public ICollection<CaffToTag> Tags { get; set; }
+        public string Tags { get; set; } = string.Empty;
         public string ThumbnailPath { get; set; } = string.Empty;
-        public ICollection<Caption> Captions { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-
-        public override void IncludeAll(IQueryable<Caff> queryable)
-        {
-            queryable.Include(x => x.Tags).ThenInclude(x => x.CaffTag);
-            queryable.Include(x => x.Comments);
-            queryable.Include(x => x.Captions);
-        }
+        public string Caption { get; set; } = string.Empty;
+        public List<Comment> Comments { get; set; } = new();
     }
 }

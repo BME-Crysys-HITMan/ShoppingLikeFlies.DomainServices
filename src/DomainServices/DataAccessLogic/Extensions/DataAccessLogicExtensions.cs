@@ -17,8 +17,6 @@ namespace ShoppingLikeFiles.DataAccessLogic.Extensions
                 x.UseSqlServer(connStr));
             services.AddScoped<IGenericRepository<Caff>, GenericRepository<Caff>>();
             services.AddScoped<IGenericRepository<Comment>, GenericRepository<Comment>>();
-            services.AddScoped<IGenericRepository<Caption>, GenericRepository<Caption>>();
-            services.AddScoped<IGenericRepository<CaffTag>, GenericRepository<CaffTag>>();
             return services;
         }
     }

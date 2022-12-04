@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ShoppingLikeFiles.DataAccessLogic.Entities
 {
-    public abstract class EntityBase<T> where T : class, new()
+    public class EntityBase
     {
         public int Id { get; set; }
 
-        public abstract void IncludeAll(IQueryable<T> queryable);
+        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime Updated { get; set; } = DateTime.UtcNow;
     }
 }
