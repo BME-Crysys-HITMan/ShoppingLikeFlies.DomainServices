@@ -63,16 +63,10 @@ public class DataService : IDataService
     }
 
     public async Task<List<CaffDTO>> SearchCaffAsync(CaffSearchDTO caffSearchDTO)
-    {
-        var models = await _genericRepository.GetAllAsync((e) =>
+        => _mapper.Map<List<CaffDTO>>((await _genericRepository.GetAllAsync()).Where(e =>
             caffSearchDTO.Caption.Contains(e.Caption)
             || ContainTags(caffSearchDTO.Tags, e.Tags)
-            || caffSearchDTO.Creator.Contains(e.Creator));
-
-        var dto = _mapper.Map<List<CaffDTO>>(models.ToList());
-
-        return dto;
-    }
+            || caffSearchDTO.Creator.Contains(e.Creator)));
 
     public async Task<CaffDTO> AddCommentAsync(int id, string comment, Guid userId)
     {
