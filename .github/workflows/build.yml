@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          dotnet sonarscanner begin /k:"BME-Crysys-HITMan_ShoppingLikeFlies.DomainServices" /o:"bme-crysys-hitman" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io"
+          dotnet sonarscanner begin /k:"BME-Crysys-HITMan_ShoppingLikeFlies.DomainServices" /o:"bme-crysys-hitman" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" #/d:sonar.cs.opencover.reportsPaths=coverage.xml
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build --no-incremental
           chmod -R 777 ./test/
