@@ -87,6 +87,12 @@ internal class DefaultCaffValidator : ICaffValidator
     private CaffCredit GetCredit(string response)
     {
         _logger.Verbose("Method {method} called with args: {}", nameof(GetCredit), response);
+
+        if (string.IsNullOrEmpty(response))
+        {
+            throw new ArgumentNullException($"{nameof(response)}");
+        }
+
         var lines = response.Split("\r\n");
 
         string[] date = lines[1].Split(":");
