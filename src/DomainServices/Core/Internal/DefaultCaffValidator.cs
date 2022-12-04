@@ -69,14 +69,16 @@ internal class DefaultCaffValidator : ICaffValidator
         var response = await _communicator.CommunicateAsync(GetArguments(filename));
         _logger.Verbose("Native returned with {response}", response);
 
-        if (response.StartsWith("0"))
-        {
-            _logger.Debug("Got an invalid file here.");
-            return null;
-        }
         if (!string.IsNullOrEmpty(response))
         {
-            return GetCredit(response);
+            _logger.Verbose("Inside if, value : {response}", response);
+            if (response.StartsWith("0"))
+            {
+                _logger.Debug("Got an invalid file here.");
+                return null;
+            }
+            _logger.Verbose("Just befor GetCredit, value : {response}", response);
+            return GetCredit(response!);
         }
 
         return null;
@@ -86,7 +88,7 @@ internal class DefaultCaffValidator : ICaffValidator
 
     private CaffCredit GetCredit(string response)
     {
-        _logger.Verbose("Method {method} called with args: {}", nameof(GetCredit), response);
+        _logger.Verbose("Method {method} called with args: {response}", nameof(GetCredit), response);
 
         if (string.IsNullOrEmpty(response))
         {
