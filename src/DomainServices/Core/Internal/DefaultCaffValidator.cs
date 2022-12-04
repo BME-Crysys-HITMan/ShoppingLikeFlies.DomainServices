@@ -68,13 +68,14 @@ internal class DefaultCaffValidator : ICaffValidator
 
         var response = await _communicator.CommunicateAsync(GetArguments(filename));
         _logger.Verbose("Native returned with {response}", response);
+
+        if (response.StartsWith("0"))
+        {
+            _logger.Debug("Got an invalid file here.");
+            return null;
+        }
         if (!string.IsNullOrEmpty(response))
         {
-            if (response.StartsWith("0"))
-            {
-                _logger.Debug("Got an invalid file here.");
-                return null;
-            }
             return GetCredit(response);
         }
 
