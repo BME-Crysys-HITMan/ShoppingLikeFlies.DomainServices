@@ -11,6 +11,8 @@ public class CaffServiceTests
     public async Task Test1()
     {
         var logger = new LoggerConfiguration()
+            .Enrich.WithProperty("testrunner", nameof(Test1))
+            .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.File($"{typeof(CaffServiceTests).FullName}.{nameof(Test1)}.txt")
                 .MinimumLevel
@@ -42,8 +44,10 @@ public class CaffServiceTests
     public async Task Test2()
     {
         var logger = new LoggerConfiguration()
+            .Enrich.WithProperty("testrunner", nameof(Test2))
+            .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.File($"{typeof(CaffServiceTests).FullName}.{nameof(Test1)}.txt")
+                .WriteTo.File($"{typeof(CaffServiceTests).FullName}.{nameof(Test2)}.txt")
                 .MinimumLevel
                 .Verbose()
                 .MinimumLevel
