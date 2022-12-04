@@ -4,6 +4,7 @@ using Serilog;
 
 namespace DomainServices.IntegrationTest;
 
+[CollectionDefinition(nameof(CaffServiceTests), DisableParallelization = true)]
 public class CaffServiceTests
 {
     [Fact]
